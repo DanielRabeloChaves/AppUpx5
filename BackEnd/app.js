@@ -29,6 +29,14 @@ app.use((req, res, next)=>{
     }
 })
 
+const routerUser = require('./routes/user') 
+
+try{
+    app.use('/user', routerUser);    
+}catch{
+    throw new Error('Erro ao executar as rotas.'); 
+}
+
 app.use((req, res, next) => {
     try{
         const erro = new Error("Falha ao conectar no Banco de Dados")
