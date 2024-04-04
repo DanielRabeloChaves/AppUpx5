@@ -108,6 +108,22 @@ async function authenticationController(req, res, next) {
         if(isPasswordCorrect == false)
           return res.status(200).json({ error: "Login ou Senha incorreto." });
 
+        if(!req.body.LoginToken){
+          const LoginToken = generateTokenLogin(5);
+          const dataEmail = {
+            to: user.email, // list of receivers
+            subject: messagesEmail.assuntoTokenLogin, // Subject line
+            //text: "Hello world?", // plain text body
+            html: messagesEmail.bodyTokenLogin(user.name, user.email, LoginToken), // html body
+          }
+          const resultSendEmail = await sendEmail(dataEmail);
+          console.log(resultSendEmail)
+          if(resultSendEmail.error){
+            res.status(401).json({error: resultSendEmail.error});
+          }
+          res.status(200).json({menssage: `Token de acesso enviado para o email ${user.email}`});
+        }
+       
         if(user.user_bloqued == 1)
           return res.status(200).json({ error: "Usuario bloqueado." });
 
@@ -116,6 +132,7 @@ async function authenticationController(req, res, next) {
           first_access: 0, 
           id: user.id
         }
+
         const resultUpdate = await updateUserById(updateDataUser);
         if(resultUpdate.affectedRows == 0)
           return res.status(401).json({ error: "Erro ao atualizar dados de acesso do usuario."});
@@ -132,20 +149,6 @@ async function authenticationController(req, res, next) {
             create_date: user.create_date
         };
         
-        const LoginToken = generateTokenLogin(5);
-        const dataEmail = {
-          title: "UPX5",
-          to: user.email, // list of receivers
-          subject: messagesEmail.assuntoTokenLogin, // Subject line
-          //text: "Hello world?", // plain text body
-          html: messagesEmail.bodyTokenLogin(user.name, user.email, LoginToken), // html body
-        }
-        const resultSendEmail = await sendEmail(dataEmail);
-        console.log(resultSendEmail)
-        if(resultSendEmail.error){
-          res.status(401).json({error: resultSendEmail.error});
-        }
-
         const token = jwt.sign(dataUser, secretKey, { expiresIn: '8h' });
         res.status(200).json({menssage: "Login efetuado com sucesso.", token: token});
   } catch (err) {

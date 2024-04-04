@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 async function sendEmail(data) {
     try{
         const info = await transporter.sendMail({
-            from: `${data.title} <${process.env.EMAIL_user}>`, // sender address
+            from: `UPX5 <${process.env.EMAIL_user}>`, // sender address
             to: data.to, // list of receivers
             subject: data.subject, // Subject line
             text: data.text, // plain text body
