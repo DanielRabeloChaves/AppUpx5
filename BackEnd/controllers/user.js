@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { secretKey } = require('../token');
+const { sendEmail } = require('../Email/email')
+const { messagesEmail } = require('../lang/pt-br');
 const { 
   modelAllUser,
   addNewUser,
@@ -9,6 +11,23 @@ const {
   updateUserById,
   modelUserByUserLogin
  } = require('../models/user/user');
+
+
+function generateTokenLogin(length) {
+  try{
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let token = '';
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      token += characters.charAt(randomIndex);
+    }
+  
+    return token;
+  }catch{
+    throw new Error('Erro ao gerar token de login.'); 
+  }
+}
 
 async function getAllUserController(req, res, next){
     try{
@@ -112,13 +131,29 @@ async function authenticationController(req, res, next) {
             last_access_date: user.last_access_date,
             create_date: user.create_date
         };
-        const token = jwt.sign(dataUser, secretKey, { expiresIn: '8h' });
+        
+        const LoginToken = generateTokenLogin(5);
+        const dataEmail = {
+          title: "UPX5",
+          to: user.email, // list of receivers
+          subject: messagesEmail.assuntoTokenLogin, // Subject line
+          //text: "Hello world?", // plain text body
+          html: messagesEmail.bodyTokenLogin(user.name, user.email, LoginToken), // html body
+        }
+        const resultSendEmail = await sendEmail(dataEmail);
+        console.log(resultSendEmail)
+        if(resultSendEmail.error){
+          res.status(401).json({error: resultSendEmail.error});
+        }
 
+        const token = jwt.sign(dataUser, secretKey, { expiresIn: '8h' });
         res.status(200).json({menssage: "Login efetuado com sucesso.", token: token});
   } catch (err) {
     return res.status(401).json({ error: "Erro ao realizar login." });
   }
 }
+
+
 
 module.exports = { 
     getAllUserController,
