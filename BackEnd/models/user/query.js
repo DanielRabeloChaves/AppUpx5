@@ -38,6 +38,15 @@ const updateUser = (obj)=> {
 
     return `UPDATE user SET ${query.join(',')} WHERE id = ${obj.id}`;
 }
+const insertTokenLogin = `INSERT INTO login_token (user_id, 
+    login,  
+    token,
+    create_date,
+    expired_date)
+    VALUE (?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 15 MINUTE))`;
+const queryGetLoginToken = `SELECT * FROM login_token WHERE token = ? AND user_id = ?`;
+const queryDeleteLoginToken = `DELETE FROM login_token WHERE user_id = ?`;
+const updatePassword= `UPDATE user SET password = ? WHERE id = ?`;
 
 module.exports = { 
     getAllUser,
@@ -45,5 +54,9 @@ module.exports = {
     getUserByCPF,
     insertNewUserContact,
     getUserByLogin,
-    updateUser
+    updateUser,
+    insertTokenLogin,
+    queryGetLoginToken,
+    queryDeleteLoginToken,
+    updatePassword
 };

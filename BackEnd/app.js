@@ -30,9 +30,11 @@ app.use((req, res, next)=>{
 })
 
 const routerUser = require('./routes/user') 
+const routerVerifyToken = require('./routes/verifyToken')
 
 try{
-    app.use('/user', routerUser);    
+    app.use('/api/user', routerUser);    
+    app.use('/api/verifytoken', routerVerifyToken);
 }catch{
     throw new Error('Erro ao executar as rotas.'); 
 }

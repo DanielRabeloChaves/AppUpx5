@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router();
 const rateLimit = require('express-rate-limit')
+const { verifyToken } = require('../token');
 const { 
     getAllUserController,
     addNewUserController,
-    authenticationController
+    authenticationController,
+    forgetPasswordController
  } = require('../controllers/user');
 
 const limiter = rateLimit({
@@ -12,8 +14,9 @@ const limiter = rateLimit({
     max: 100,
 });
 
-router.get('/all', getAllUserController);
-router.post('/cadastro', addNewUserController)
-router.post('/login', authenticationController)
+router.get('/all', verifyToken, getAllUserController);
+router.post('/cadastro', addNewUserController);
+router.post('/login', authenticationController);
+router.post('/forgetpassword', forgetPasswordController);
 
 module.exports = router;

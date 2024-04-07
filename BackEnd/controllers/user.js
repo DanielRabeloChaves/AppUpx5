@@ -9,9 +9,12 @@ const {
   modelUserByCPF,
   addNewContactUserUser,
   updateUserById,
-  modelUserByUserLogin
+  modelUserByUserLogin,
+  addLoginToken,
+  getLoginToken,
+  deleteLoginToken,
+  newPassword
  } = require('../models/user/user');
-
 
 function generateTokenLogin(length) {
   try{
@@ -31,9 +34,14 @@ function generateTokenLogin(length) {
 
 async function getAllUserController(req, res, next){
     try{
-        const user = await modelAllUser();
-        if(!user)
-          return res.status(200).json({ error: "Não possui usuarios" });
+      const token = req?.headers?.authorization?.replace(/Bearer /gi, '');
+      const decryptToken = jwt.verify(token, secretKey);
+      if (decryptToken.type_access_user_id != 1) // ADMIN
+        return res.status(200).json({ error: "Acesso negado." });
+
+      const user = await modelAllUser();
+      if(!user)
+        return res.status(200).json({ error: "Não possui usuarios" });
     
         res.status(200).json(user)
     }catch(err){
@@ -64,7 +72,7 @@ function verifyPassword(senha) {
 async function addNewUserController(req, res, next) {
   try {
       let data = req.body;
-      if(!data.login || !data.password || !data.cpf || !data.email || !data.phone)
+      if(!data.login || !data.password || !data.cpf || !data.email || !data.phone || !data.confirm_passowrd)
         return res.status(200).json({ error: "Necessario inserir todas as informaçõe." });
 
       const getUser = await modelUserByCPF(data.cpf);
@@ -76,7 +84,7 @@ async function addNewUserController(req, res, next) {
         return res.status(200).json({ error: "Senha no formato incorreto."});
          
       if(data.password != data.confirm_passowrd)
-        return res.status(200).json({ error: "Necessario confirmar sua senha."});
+        return res.status(200).json({ error: "Nova senha e Confirma Nova Senha devem estar no mesmo formato."});
               
       const hashedPassword = await bcrypt.hash(data.password, 10);
       data.password = hashedPassword
@@ -108,22 +116,37 @@ async function authenticationController(req, res, next) {
         if(isPasswordCorrect == false)
           return res.status(200).json({ error: "Login ou Senha incorreto." });
 
-        if(!req.body.LoginToken){
+        if(!req.body.loginToken){
           const LoginToken = generateTokenLogin(5);
+          let insertTokenDB = addLoginToken(LoginToken, user);
+          if (insertTokenDB.affectedRows == 0)
+            return res.status(401).json({ error: "Erro ao gerar token" });
+
           const dataEmail = {
             to: user.email, // list of receivers
             subject: messagesEmail.assuntoTokenLogin, // Subject line
-            //text: "Hello world?", // plain text body
             html: messagesEmail.bodyTokenLogin(user.name, user.email, LoginToken), // html body
           }
           const resultSendEmail = await sendEmail(dataEmail);
-          console.log(resultSendEmail)
-          if(resultSendEmail.error){
-            res.status(401).json({error: resultSendEmail.error});
-          }
-          res.status(200).json({menssage: `Token de acesso enviado para o email ${user.email}`});
+          if(resultSendEmail.error)
+            return res.status(401).json({error: resultSendEmail.error});
+          
+          return res.status(200).json({menssage: `Token de acesso enviado para o email ${user.email}`});
         }
        
+        const verifyToken = await getLoginToken(req.body.loginToken, user.id);
+        const deleteToken = await deleteLoginToken(user.id)
+        if (deleteToken.affectedRows == 0)
+          return res.status(404).json({ error:"Erro ao deletar token."});
+
+        if (!verifyToken)
+          return res.status(200).json({ error: "Token de acesso invalido."});
+
+        const expiration_token = new Date(verifyToken.expired_date);
+        const today = new Date();
+        if(today > expiration_token)
+          return res.status(200).json({ error:"Token de acesso expirado."});
+        
         if(user.user_bloqued == 1)
           return res.status(200).json({ error: "Usuario bloqueado." });
 
@@ -132,7 +155,6 @@ async function authenticationController(req, res, next) {
           first_access: 0, 
           id: user.id
         }
-
         const resultUpdate = await updateUserById(updateDataUser);
         if(resultUpdate.affectedRows == 0)
           return res.status(401).json({ error: "Erro ao atualizar dados de acesso do usuario."});
@@ -148,18 +170,90 @@ async function authenticationController(req, res, next) {
             last_access_date: user.last_access_date,
             create_date: user.create_date
         };
-        
         const token = jwt.sign(dataUser, secretKey, { expiresIn: '8h' });
-        res.status(200).json({menssage: "Login efetuado com sucesso.", token: token});
+        return res.status(200).json({menssage: "Login efetuado com sucesso.", token: token});
   } catch (err) {
     return res.status(401).json({ error: "Erro ao realizar login." });
   }
 }
 
+async function forgetPasswordController(req, res, next) {
+  try {
+    let data = req.body
+    if(!data.login)
+      return res.status(200).json({ error: "Necessario preencher usuario." });
 
+    const user = await modelUserByUserLogin(data.login);
+    if(!user)
+      return res.status(200).json({ error: "Login incorreto." });
+
+    if(!data.loginToken){
+      const LoginToken = generateTokenLogin(5);
+      let insertTokenDB = addLoginToken(LoginToken, user);
+      if (insertTokenDB.affectedRows == 0)
+        return res.status(401).json({ error: "Erro ao gerar token" });
+
+      const dataEmail = {
+        to: user.email, // list of receivers
+        subject: messagesEmail.assuntoTokenLogin, // Subject line
+        html: messagesEmail.bodyTokenLogin(user.name, user.email, LoginToken), // html body
+      }
+      const resultSendEmail = await sendEmail(dataEmail);
+      if(resultSendEmail.error)
+        return res.status(401).json({error: resultSendEmail.error});
+      
+      return res.status(200).json({menssage: `Token de recuperação de senha enviado para o email ${user.email}`});
+    }
+
+    const verifyToken = await getLoginToken(data.loginToken, user.id);
+    if (!verifyToken){
+      const deleteToken = await deleteLoginToken(user.id)
+      if (deleteToken.affectedRows == 0)
+        return res.status(404).json({ error:"Erro ao deletar token."});
+      return res.status(200).json({ error: "Token de acesso invalido."});
+    }
+      
+    const expiration_token = new Date(verifyToken.expired_date);
+    const today = new Date();
+    if(today > expiration_token){
+      const deleteToken = await deleteLoginToken(user.id)
+      if (deleteToken.affectedRows == 0)
+        return res.status(404).json({ error:"Erro ao deletar token."});
+      return res.status(200).json({ error:"Token de acesso expirado."});
+    }
+      
+    if(user.user_bloqued == 1)
+      return res.status(200).json({ error: "Usuario bloqueado." });
+
+    if(!data.password || !data.confirm_passowrd)
+      return res.status(200).json({ error: "Necessario preencher todos os campos." });
+
+    let verifyFormatPassword = verifyPassword(data.password)
+    if(!verifyFormatPassword)
+      return res.status(200).json({ error: "Senha no formato incorreto."});
+
+    if(data.password != data.confirm_passowrd)
+      return res.status(200).json({ error: "Nova Senha e Confirma Nova Senha devem estar no mesmo formato."});
+ 
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const resultNewPassword = await newPassword(hashedPassword, user.id);
+    if (resultNewPassword.affectedRows == 0)
+      return res.status(401).json({ error: "Erro ao criar nova senha."});
+      
+    const deleteToken = await deleteLoginToken(user.id)
+    if (deleteToken.affectedRows == 0)
+      return res.status(404).json({ error:"Erro ao deletar token."});
+
+    res.status(200).json({menssage: "Senha atualizada com sucesso."});     
+  } catch (err) {
+    console.log(err)
+    return res.status(409).json({ error: "Erro ao atualizar senha."});
+  }
+}
 
 module.exports = { 
     getAllUserController,
     addNewUserController,
-    authenticationController
+    authenticationController,
+    forgetPasswordController
 };
