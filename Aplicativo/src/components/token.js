@@ -1,9 +1,16 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ToastAndroid, Keyboard  } from 'react-native';
 import { defaultStyles, font, defaultColor } from '../theme';
 import { Button } from '@rneui/themed';
+import api from '../config/api'
+import { useNavigation } from '@react-navigation/native'; 
 
-export default () => {
+export default ({data, type}) => {
+  const navigation = useNavigation();
+  const handlePress = (path) => {
+    navigation.navigate(path);
+  };
+
   const [inputValues, setInputValues] = useState(['', '', '', '', '']);
 
   const char1Ref = useRef(null);
@@ -22,14 +29,58 @@ export default () => {
     setInputValues(newInputValues);
   };
 
+  const showToastWithGravityAndOffset = (text) => { ToastAndroid.showWithGravityAndOffset( text, ToastAndroid.LONG, ToastAndroid.TOP, 25, 50);};
+  const apiAuthentication = async (dataUser) => {
+      try {
+        console.log("Entrou aqui forget login")
+        const response = await api.post("/user/login", dataUser);
+        const data = response.data;
+        Keyboard.dismiss();
+        showToastWithGravityAndOffset(data.menssage || data.error);
+        if(data.status && data.status == "Sucesso"){
+          handlePress("home")
+        }
+      } catch (error) {
+          showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
+          console.log(error)
+      }
+  }
+
+  const apiForgetPassword = async (dataUser) => {
+    try {
+      console.log("Entrou aqui forget password")
+      const response = await api.post("/user/forgetpassword", dataUser);
+      const data = response.data;
+      console.log(data)
+      if(data.menssage && data.status === "Preencher Campos"){
+        console.log("Preencher Campos")
+      }
+      if(data.menssage && data.status === "Sucesso"){
+        console.log("Sucesso")
+      }
+      showToastWithGravityAndOffset(data.menssage || data.error);
+    } catch (error) {
+        showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
+        console.log(error)
+    }
+  }
+
   const concatenateChars = () => {
     const tokenLogin = inputValues.join('');
     const user = {
-      coligada: 3,
-      // login: username,
-      // password: password,
-      token: tokenLogin
+      login: data.login,
+      password: data.password,
+      loginToken: tokenLogin
     };
+
+    const userForgetPassword = {
+      login: data.login,
+      loginToken: tokenLogin,
+      password: '',
+      confirm_passowrd: ''
+    };
+    console.log("type: ", type)
+    type == "Login" ? apiAuthentication(user) : apiForgetPassword(userForgetPassword)
     console.log(user);
   };
 

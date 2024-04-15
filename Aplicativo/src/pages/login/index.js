@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { View, StyleSheet, Text, Image, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, Modal, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, StyleSheet, Text, Image, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, Modal, TouchableOpacity, ToastAndroid } from 'react-native';
 import Constants from 'expo-constants';
 import { defaultStyles, font, defaultColor } from '../../theme';
 import Logo from '../../Img/logoWhite.png';
@@ -8,6 +8,7 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 import ModalToken from '../../components/token'
+import api from '../../config/api'
 
 const windowWidth = Dimensions.get('window').width;
 const inputWidthScale = 0.8;
@@ -15,15 +16,56 @@ const inputWidth = windowWidth * inputWidthScale;
 
 export default () => {
     const navigation = useNavigation();
-    const handlePress = (path) => {
-        navigation.navigate(path);
-    };
+    const handlePress = (path) => {navigation.navigate(path);};
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
-
+    const [responseLogin, setResponseLogin] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [typeAccess, setTypeAccess] = useState('');
     const openModal = () => { setModalVisible(true);};
     const closeModal = () => {setModalVisible(false);};
+   
+    const userData = () => {
+        return data = {
+            login: user,
+            password: password,
+        }
+    }
+    const showToastWithGravityAndOffset = (text) => { ToastAndroid.showWithGravityAndOffset( text, ToastAndroid.LONG, ToastAndroid.TOP, 25, 50);};
+    const apiAuthentication = async () => {
+        try {
+          const response = await api.post("/user/login", userData());
+          const data = response.data;
+          if(data.menssage && data.status === "Email Enviado"){
+            setTypeAccess("Login")
+            setModalVisible(true)
+          }
+          showToastWithGravityAndOffset(data.menssage || data.error);
+        } catch (error) {
+            showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
+            console.log(error)
+        }
+      }
+
+      const apiForgetPassword = async (type) => {
+        try {
+          const response = await api.post("/user/forgetpassword", userData());
+          const data = response.data;
+          if(data.menssage && data.status === "Email Enviado"){
+            setTypeAccess("ForgetPassword")
+            setModalVisible(true)
+          }
+          showToastWithGravityAndOffset(data.menssage || data.error);
+        } catch (error) {
+            showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
+            console.log(error)
+        }
+      }
+
+      useEffect(() => {
+        userData();
+      }, []);
+   
 
     return (
         <KeyboardAvoidingView style={{ flex: 1, marginTop: Constants.statusBarHeight }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Constants.statusBarHeight} >
@@ -37,7 +79,7 @@ export default () => {
                         onRequestClose={closeModal}
                     >
                          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                            <ModalToken /> 
+                            <ModalToken data={userData()} type={typeAccess} /> 
                          </View>
                          <TouchableOpacity style={styles.CloseModal} onPress={closeModal}></TouchableOpacity>
                     </Modal>
@@ -55,20 +97,32 @@ export default () => {
                                         <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Password'} autoCapitalize="none" secureTextEntry={true} />
                                     </View>
                                     <View style={styles.forgetPassword}>
-                                        <TouchableOpacity  onPress={openModal}>
+                                        <TouchableOpacity onPress={apiForgetPassword}>
                                             <Text style={styles.text}>Forgot your password? Click here</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View style={styles.boxButtons}>
                                     <View style={styles.buttonContainer}>
-                                        <Button title="Login" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }} onPress={openModal} />
+                                        <Button 
+                                            title="Login" 
+                                            titleStyle={defaultStyles.fontButton} 
+                                            buttonStyle={defaultStyles.button} 
+                                            containerStyle={{ height: 40, width: 230 }} 
+                                            onPress={apiAuthentication} 
+                                        />
                                     </View>
                                     <View style={styles.orContainer}>
                                         <Text style={styles.text}>Or</Text>
                                     </View>
                                     <View style={styles.buttonContainer}>
-                                        <Button title="SignUp" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 130 }} onPress={() => handlePress("login")} />
+                                        <Button 
+                                            title="SignUp" 
+                                            titleStyle={defaultStyles.fontButton} 
+                                            buttonStyle={defaultStyles.button} 
+                                            containerStyle={{ height: 40, width: 130 }} 
+                                            onPress={() => handlePress("signUp")}
+                                        />
                                     </View>
                                 </View>
                             </View>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, Image, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, Keyboard, ToastAndroid } from 'react-native';
 import Constants from 'expo-constants';
 import { defaultStyles, font, defaultColor } from '../../theme';
 import Logo from '../../Img/logoWhite.png';
@@ -7,6 +7,7 @@ import Header from '../../components/header';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
+import api from '../../config/api'
 
 const windowWidth = Dimensions.get('window').width;
 const inputWidthScale = 0.8;
@@ -17,6 +18,7 @@ export default () => {
     const handlePress = (path) => {
         navigation.navigate(path);
     };
+
     const [name, setName] = useState('');
     const [cpf, setCpf] = useState('');
     const [email, setEmail] = useState('');
@@ -24,6 +26,39 @@ export default () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const userData = () => {
+        return data = {
+            name: name,
+            cpf: cpf,
+            login: user,
+            password: password,
+            confirm_passowrd: confirmPassword,
+            email: email,
+            phone: phone
+        }
+    }
+    const showToastWithGravityAndOffset = (text) => { ToastAndroid.showWithGravityAndOffset( text, ToastAndroid.LONG, ToastAndroid.TOP, 25, 50);};
+    const apiAuthentication = async () => {
+        try {
+          const response = await api.post("/user/cadastro", userData());
+          console.log("Chegou aqui")
+          const data = response.data;
+          console.log(data)
+          Keyboard.dismiss();
+          showToastWithGravityAndOffset(data.menssage || data.error);
+          if(data.status && data.status === "Sucesso"){
+            handlePress("login")
+          }
+        } catch (error) {
+            showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
+            console.log(error)
+        }
+      }
+
+      useEffect(() => {
+        userData();
+      }, []);
 
     return (
         <KeyboardAvoidingView style={{ flex: 1, marginTop: Constants.statusBarHeight }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Constants.statusBarHeight}>
@@ -66,7 +101,7 @@ export default () => {
                                 </View>
                                 <View style={styles.boxButtons}>
                                     <View style={styles.buttonContainer}>
-                                        <Button title="SignUp" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }} onPress={() => handlePress("login")} />
+                                        <Button title="SignUp" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }}  onPress={apiAuthentication} />
                                     </View>
                                 </View>
                             </View>
