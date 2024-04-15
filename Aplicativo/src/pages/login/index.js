@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Text, Image, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, StyleSheet, Text, Image, TextInput, Dimensions, KeyboardAvoidingView, ScrollView, Platform, Modal, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
 import { defaultStyles, font, defaultColor } from '../../theme';
 import Logo from '../../Img/logoWhite.png';
@@ -7,6 +7,7 @@ import Header from '../../components/header';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
+import ModalToken from '../../components/token'
 
 const windowWidth = Dimensions.get('window').width;
 const inputWidthScale = 0.8;
@@ -20,11 +21,26 @@ export default () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const openModal = () => { setModalVisible(true);};
+    const closeModal = () => {setModalVisible(false);};
+
     return (
         <KeyboardAvoidingView style={{ flex: 1, marginTop: Constants.statusBarHeight }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Constants.statusBarHeight} >
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" >
                 <View style={{ flex: 1 }}>
                     <Header type={"login"} />
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={closeModal}
+                    >
+                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <ModalToken /> 
+                         </View>
+                         <TouchableOpacity style={styles.CloseModal} onPress={closeModal}></TouchableOpacity>
+                    </Modal>
                     <ScrollView style={{ flex: 1 }}>
                         <View style={styles.mainBox}>
                             <View style={styles.boxContainer}>
@@ -39,12 +55,14 @@ export default () => {
                                         <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Password'} autoCapitalize="none" secureTextEntry={true} />
                                     </View>
                                     <View style={styles.forgetPassword}>
-                                        <Text style={styles.text}>Forgot your password? Click here</Text>
+                                        <TouchableOpacity  onPress={openModal}>
+                                            <Text style={styles.text}>Forgot your password? Click here</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View style={styles.boxButtons}>
                                     <View style={styles.buttonContainer}>
-                                        <Button title="Login" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }} onPress={() => handlePress("login")} />
+                                        <Button title="Login" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }} onPress={openModal} />
                                     </View>
                                     <View style={styles.orContainer}>
                                         <Text style={styles.text}>Or</Text>
@@ -56,7 +74,6 @@ export default () => {
                             </View>
                         </View>
                     </ScrollView>
-                    
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -115,5 +132,11 @@ const styles = StyleSheet.create({
     },
     forgetPassword: {
         padding: 10
+    },
+    CloseModal: {
+        height: "100%",
+        width: "100%",
+        position: "absolute",
+        backgroundColor: 'rgba(0, 0, 0, 0.5)' 
     }
 });

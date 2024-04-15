@@ -12,7 +12,7 @@ export default ({type}) => {
     navigation.navigate(path);
   };
   const handleGoBack = () => {
-    navigation.goBack(); // Navega de volta para a página anterior
+    navigation.goBack();
   };
 
   console.log(type)
