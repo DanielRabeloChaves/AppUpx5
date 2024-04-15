@@ -1,127 +1,76 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import React from 'react'
+import { Dimensions, Text, View, Image, StyleSheet  } from 'react-native';
+import Carousel from 'react-native-reanimated-carousel';
+import { imagesCarouselHome } from '../util/objects'
+import { font } from '../theme';
 
-export default function CustomCarousel({ data }) {
-    const [activeSlide, setActiveSlide] = useState(0);
-    const carouselRef = useRef(null);
-  
-    useEffect(() => {
-      const interval = setInterval(() => {
-        if (carouselRef.current) {
-          const nextSlide = (activeSlide + 1) % data.length;
-          carouselRef.current.snapToItem(nextSlide);
-          setActiveSlide(nextSlide);
-        }
-      }, 5000);
-  
-      return () => clearInterval(interval);
-    }, [activeSlide, data.length]);
-  
-    const renderImageItem = ({ item }) => {
-      return (
-        <View>
-          <Image source={item.image} style={styles.image} />
-          <Text style={styles.imageText}>{item.text}</Text>
-        </View>
-      );
-    };
-  
+const window = Dimensions.get('window');
+const PAGE_WIDTH = window.width;
+
+function CustomCarousel() {
     return (
-      <View style={styles.container}>
-        <Carousel
-          ref={carouselRef}
-          data={data}
-          renderItem={renderImageItem}
-          sliderWidth={300}
-          itemWidth={300}
-          onSnapToItem={(index) => setActiveSlide(index)}
-        />
-        <View style={styles.navigateImages}>
-          <TouchableOpacity style={styles.arrowButton} onPress={() => {
-            if (carouselRef.current) {
-              const prevSlide = (activeSlide - 1 + data.length) % data.length;
-              carouselRef.current.snapToItem(prevSlide);
-              setActiveSlide(prevSlide);
-            }
-          }}>
-            <Text style={styles.arrowText}>{"<"}</Text>
-          </TouchableOpacity>
-          <View style={styles.pagination}>
-            {data.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.paginationDot,
-                  index === activeSlide ? styles.activeDot : null,
-                ]}
-              />
-            ))}
-          </View>
-          <TouchableOpacity style={[styles.arrowButton]} onPress={() => {
-            if (carouselRef.current) {
-              const nextSlide = (activeSlide + 1) % data.length;
-              carouselRef.current.snapToItem(nextSlide);
-              setActiveSlide(nextSlide);
-            }
-          }}>
-            <Text style={styles.arrowText}>{">"}</Text>
-          </TouchableOpacity>
+        <View style={{marginVertical: 10}}>
+            <Carousel
+                style={styles.carousel}
+                pagingEnabled={true}
+                enableSnap={true}
+                loop={true}
+                autoPlay={true}
+                autoPlayReverse={false}
+                width={280}
+                mode="stack"
+                data={imagesCarouselHome}
+                scrollAnimationDuration={3000}
+                renderItem={({ item, index }) => (
+                  <View style={styles.container}>
+                      <View>
+                        <Image style={styles.image} source={item.image} />
+                        <View style={styles.body}><Text style={styles.title}>{item.title}</Text></View>
+                      </View>
+                      <View style={styles.body}><Text style={styles.text}>{item.text}</Text></View>
+                  </View>
+                )}
+            />
         </View>
-      </View>
     );
-  }
+}
 
 const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: 200,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
   container: {
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: "white",
+    height: "100%",
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    marginHorizontal: 5,
     elevation: 5,
   },
-  navigateImages: {
-    flexDirection: 'row',
+  carousel: {
+    height: 310,
+    width: PAGE_WIDTH,
+    paddingVertical: 3,
+    alignSelf: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
   },
-  image: {
-    width: 300,
-    height: 200,
-    borderRadius: 5,
-    backgroundColor: "red"
+  body: {
+    paddingHorizontal: 15,
+    borderRadius: 15,
+    marginTop: 5,
   },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 50,
+  text: {
+    fontFamily: font.fontFamily,
+    fontSize: 12,
+    marginBottom: 10
   },
-  paginationDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 5,
-    backgroundColor: '#5B5E61',
-  },
-  activeDot: {
-    backgroundColor: '#3D61B6',
-  },
-  arrowButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    zIndex: 1,
-  },
-  arrowText: {
-    color: '#5B5E61',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  imageText: {
-    marginVertical: 20,
-    textAlign: 'center'
+  title: {
+    fontFamily: font.fontFamily,
+    fontWeight: "bold",
+    fontSize: 16,
   }
-});
+})
+
+export default CustomCarousel;

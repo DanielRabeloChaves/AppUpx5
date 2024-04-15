@@ -2,7 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import startPage from './src/pages/startPage/startPage'
+import startPage from './src/pages/startPage/index'
+import signUp from './src/pages/signUp/index'
+import login from './src/pages/login/index'
 
 const Stack = createNativeStackNavigator();
 export default () => {
@@ -12,6 +14,8 @@ export default () => {
         initialRouteName="start" // Coloque aqui a pagina que voce deseja que apareca primeiro
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="start" component={startPage} />
+        <Stack.Screen name="signUp" component={signUp} />
+        <Stack.Screen name="login" component={login} />
         {/* <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="candidato" component={PerfilCandidato} />
         <Stack.Screen name="UsuarioContratante" component={PerfilContratante} />

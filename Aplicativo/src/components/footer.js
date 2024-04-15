@@ -1,14 +1,36 @@
 import React from 'react'
-
-import {View, StyleSheet, Text, Image} from 'react-native' 
+import {View, StyleSheet, Text, Image, Linking, TouchableOpacity } from 'react-native' 
 import Logo from '../Img/logoWhite.png';
+import { defaultStyles, defaultColor } from '../theme';
+import { AntDesign, Entypo, FontAwesome6 } from '@expo/vector-icons';
 
-export default ({texto, cor='white', fontSize}) => (
-    <View style={styles.footer}>
-        <Image style={styles.logo} source={Logo}/>
-        <Text style={styles.text} >©2024 Boston Scientific Corporation or its affiliates.</Text>
-    </View>
-)
+export default () => {
+    const handlePress = (url) => {Linking.openURL(url);};
+    return (
+        <View>
+            <View style={defaultStyles.styleLineView}>
+                <View style={styles.SocialIcons}>
+                <TouchableOpacity onPress={() => handlePress("https://www.facebook.com/BostonScientific")}>
+                    <Entypo name="facebook-with-circle" size={30} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handlePress("https://www.instagram.com/bostonsci/")}>
+                    <AntDesign name="instagram" size={30} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handlePress("https://twitter.com/bostonsci")}>
+                    <FontAwesome6 name="square-x-twitter" size={30} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handlePress("https://www.linkedin.com/company/boston-scientific")}>
+                    <Entypo name="linkedin-with-circle" size={30} color="white" />
+                </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.footer}>
+                <Image style={styles.logo} source={Logo}/>
+                <Text style={styles.text} >©2024 Boston Scientific Corporation or its affiliates (UPX5).</Text>
+            </View>
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
     footer: {
@@ -16,8 +38,8 @@ const styles = StyleSheet.create({
       width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: "#007DB3",
-      color: "white"
+      backgroundColor: defaultColor.primaryColor,
+      color: "white",
     },
     text: {
         fontFamily: 'Roboto',
@@ -28,4 +50,9 @@ const styles = StyleSheet.create({
         height: 30,
         width: 60,
     },
-  })
+    SocialIcons:{
+    width: "80%",
+    flexDirection: "row",
+    justifyContent: "space-evenly"
+  }
+})
