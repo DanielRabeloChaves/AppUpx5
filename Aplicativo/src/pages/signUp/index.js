@@ -41,7 +41,7 @@ export default () => {
     const showToastWithGravityAndOffset = (text) => { ToastAndroid.showWithGravityAndOffset( text, ToastAndroid.LONG, ToastAndroid.TOP, 25, 50);};
     const apiAuthentication = async () => {
         try {
-          const response = await api.post("/user/cadastro", userData());
+          const response = await api.post("/user/create", userData());
           const data = response.data;
           Keyboard.dismiss();
           showToastWithGravityAndOffset(data.menssage || data.error);
