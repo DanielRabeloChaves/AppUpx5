@@ -29,7 +29,9 @@ export default ({type}) => {
             </View>
         : type == "login" 
         ? <></> 
-        : <></> 
+        : <>
+          <View style={styles.profileUser}></View>
+        </> 
         }
     </View>
   );
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: defaultColor.primaryColor,
     flexDirection: "row",
-    paddingLeft: 10},
+    paddingHorizontal: 10},
   logo: {
     height: 30,
     width: 74,
@@ -53,5 +55,11 @@ const styles = StyleSheet.create({
   rightContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  profileUser: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    backgroundColor: "grey",
   }
 });

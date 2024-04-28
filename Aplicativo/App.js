@@ -12,7 +12,7 @@ export default () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="start" // Coloque aqui a pagina que voce deseja que apareca primeiro
+        initialRouteName="home" // Coloque aqui a pagina que voce deseja que apareca primeiro
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="start" component={startPage} />
         <Stack.Screen name="signUp" component={signUp} />
