@@ -84,7 +84,7 @@ async function addNewUserController(req, res, next) {
         return res.status(200).json({ error: "Senha no formato incorreto."});
          
       if(data.password != data.confirm_passowrd)
-        return res.status(200).json({ error: "Nova senha e Confirma Nova Senha devem estar no mesmo formato."});
+        return res.status(200).json({ error: "Nova Senha e Confirma Nova Senha devem estar no mesmo formato."});
               
       const hashedPassword = await bcrypt.hash(data.password, 10);
       data.password = hashedPassword
@@ -97,7 +97,7 @@ async function addNewUserController(req, res, next) {
       if(user_contact.affectedRows == 0)
         return res.status(401).json({ error: "Erro ao criar dados de contato do usuario."});
       
-      res.status(200).json({menssage: "Usuario criado com sucesso."});
+      res.status(200).json({menssage: "Usuario criado com sucesso.", status: "Sucesso"});
   } catch (err) {
     return res.status(404).json({ error: "Erro ao inserir novo usuario" });
   }
@@ -131,7 +131,7 @@ async function authenticationController(req, res, next) {
           if(resultSendEmail.error)
             return res.status(401).json({error: resultSendEmail.error});
           
-          return res.status(200).json({menssage: `Token de acesso enviado para o email ${user.email}`});
+          return res.status(200).json({menssage: `Token de acesso enviado para o email ${user.email}`, status: "Email Enviado"});
         }
        
         const verifyToken = await getLoginToken(req.body.loginToken, user.id);
@@ -171,7 +171,7 @@ async function authenticationController(req, res, next) {
             create_date: user.create_date
         };
         const token = jwt.sign(dataUser, secretKey, { expiresIn: '8h' });
-        return res.status(200).json({menssage: "Login efetuado com sucesso.", token: token});
+        return res.status(200).json({menssage: "Login efetuado com sucesso.", token: token, status: "Sucesso"});
   } catch (err) {
     return res.status(401).json({ error: "Erro ao realizar login." });
   }
@@ -202,7 +202,7 @@ async function forgetPasswordController(req, res, next) {
       if(resultSendEmail.error)
         return res.status(401).json({error: resultSendEmail.error});
       
-      return res.status(200).json({menssage: `Token de recuperação de senha enviado para o email ${user.email}`});
+      return res.status(200).json({menssage: `Token de recuperação de senha enviado para o email ${user.email}`, status: "Email Enviado"});
     }
 
     const verifyToken = await getLoginToken(data.loginToken, user.id);
@@ -226,7 +226,7 @@ async function forgetPasswordController(req, res, next) {
       return res.status(200).json({ error: "Usuario bloqueado." });
 
     if(!data.password || !data.confirm_passowrd)
-      return res.status(200).json({ error: "Necessario preencher todos os campos." });
+      return res.status(200).json({ error: "Necessario preencher todos os campos.", status:"Preencher Campos" });
 
     let verifyFormatPassword = verifyPassword(data.password)
     if(!verifyFormatPassword)
@@ -244,7 +244,7 @@ async function forgetPasswordController(req, res, next) {
     if (deleteToken.affectedRows == 0)
       return res.status(404).json({ error:"Erro ao deletar token."});
 
-    res.status(200).json({menssage: "Senha atualizada com sucesso."});     
+    res.status(200).json({menssage: "Senha atualizada com sucesso.", status: "Sucesso"});     
   } catch (err) {
     console.log(err)
     return res.status(409).json({ error: "Erro ao atualizar senha."});

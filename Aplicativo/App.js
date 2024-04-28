@@ -1,20 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef } from 'react'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
+import startPage from './src/pages/startPage/index'
+import signUp from './src/pages/signUp/index'
+import login from './src/pages/login/index'
+import home from './src/pages/home/index'
+
+const Stack = createNativeStackNavigator();
+export default () => {
   return (
-    <View style={styles.container}>
-      <Text>Testevaldo aplicativo UPX5!!!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="start" // Coloque aqui a pagina que voce deseja que apareca primeiro
+        screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="start" component={startPage} />
+        <Stack.Screen name="signUp" component={signUp} />
+        <Stack.Screen name="login" component={login} />
+        <Stack.Screen name="home" component={home} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+};
