@@ -15,7 +15,6 @@ export default ({type}) => {
     navigation.goBack();
   };
 
-  console.log(type)
   return (
     <View style={styles.header}>
       <View style={styles.leftContainer}>
@@ -25,8 +24,8 @@ export default ({type}) => {
       </View>
         {type == "startPage" 
         ?   <View  style={styles.rightContainer}>
-                <Button title="Login" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{height: 35, width: 85}} onPress={() => handlePress("login")} />
-                <Button title="Sign up" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{height: 35, width: 85}} onPress={() => handlePress("signUp")} /> 
+                <Button title="Logar" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{height: 35, width: 85}} onPress={() => handlePress("login")} />
+                <Button title="Cadastrar" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{height: 35, width: 85}} onPress={() => handlePress("signUp")} /> 
             </View>
         : type == "login" 
         ? <></> 

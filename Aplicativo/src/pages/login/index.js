@@ -54,6 +54,7 @@ export default () => {
           if(data.menssage && data.status === "Email Enviado"){
             setTypeAccess("ForgetPassword")
             setModalVisible(true)
+
           }
           showToastWithGravityAndOffset(data.menssage || data.error);
         } catch (error) {
@@ -90,34 +91,34 @@ export default () => {
                                 <View>
                                     <View style={styles.input}>
                                         <FontAwesome5 name="user" size={20} color="#989898" style={{ marginRight: 10 }} />
-                                        <TextInput style={styles.inputBox} value={user} onChangeText={setUser} placeholder={'User'} autoCapitalize="none" />
+                                        <TextInput style={styles.inputBox} value={user} onChangeText={setUser} placeholder={'Usuario'} autoCapitalize="none" />
                                     </View>
                                     <View style={styles.input}>
                                         <MaterialIcons name="lock-outline" size={20} color="#989898" style={{ marginRight: 10 }} />
-                                        <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Password'} autoCapitalize="none" secureTextEntry={true} />
+                                        <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Senha'} autoCapitalize="none" secureTextEntry={true} />
                                     </View>
                                     <View style={styles.forgetPassword}>
                                         <TouchableOpacity onPress={apiForgetPassword}>
-                                            <Text style={styles.text}>Forgot your password? Click here</Text>
+                                            <Text style={styles.text}>Esqueceu sua senha? Clique aqui.</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
                                 <View style={styles.boxButtons}>
                                     <View style={styles.buttonContainer}>
                                         <Button 
-                                            title="Login" 
+                                            title="Logar" 
                                             titleStyle={defaultStyles.fontButton} 
                                             buttonStyle={defaultStyles.button} 
-                                            containerStyle={{ height: 40, width: 230 }} 
-                                            onPress={apiAuthentication} 
+                                            containerStyle={{ height: 40, width: 230 }}  
+                                            onPress={() => apiAuthentication()}
                                         />
                                     </View>
                                     <View style={styles.orContainer}>
-                                        <Text style={styles.text}>Or</Text>
+                                        <Text style={styles.text}>Ou</Text>
                                     </View>
                                     <View style={styles.buttonContainer}>
                                         <Button 
-                                            title="SignUp" 
+                                            title="Cadastrar" 
                                             titleStyle={defaultStyles.fontButton} 
                                             buttonStyle={defaultStyles.button} 
                                             containerStyle={{ height: 40, width: 130 }} 

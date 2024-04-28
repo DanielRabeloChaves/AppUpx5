@@ -20,7 +20,7 @@ function CustomCarousel() {
                 width={280}
                 mode="stack"
                 data={imagesCarouselHome}
-                scrollAnimationDuration={3000}
+                scrollAnimationDuration={1000}
                 renderItem={({ item, index }) => (
                   <View style={styles.container}>
                       <View>

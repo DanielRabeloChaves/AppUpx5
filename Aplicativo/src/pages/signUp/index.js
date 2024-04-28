@@ -42,9 +42,7 @@ export default () => {
     const apiAuthentication = async () => {
         try {
           const response = await api.post("/user/cadastro", userData());
-          console.log("Chegou aqui")
           const data = response.data;
-          console.log(data)
           Keyboard.dismiss();
           showToastWithGravityAndOffset(data.menssage || data.error);
           if(data.status && data.status === "Sucesso"){
@@ -72,7 +70,7 @@ export default () => {
                                 <View>
                                     <View style={styles.input}>
                                         <FontAwesome5 name="user-alt" size={20} color="#989898" style={{ marginRight: 10 }} />
-                                        <TextInput style={styles.inputBox} value={name} onChangeText={setName} placeholder={'Name'} autoCapitalize="none" />
+                                        <TextInput style={styles.inputBox} value={name} onChangeText={setName} placeholder={'Nome'} autoCapitalize="none" />
                                     </View>
                                     <View style={styles.input}>
                                         <FontAwesome5 name="user-edit" size={20} color="#989898" style={{ marginRight: 10 }} />
@@ -84,24 +82,24 @@ export default () => {
                                     </View>
                                     <View style={styles.input}>
                                         <FontAwesome5 name="phone-alt" size={20} color="#989898" style={{ marginRight: 10 }} />
-                                        <TextInput style={styles.inputBox} value={phone} onChangeText={setPhone} placeholder={'Phone'} autoCapitalize="none" keyboardType="phone-pad" />
+                                        <TextInput style={styles.inputBox} value={phone} onChangeText={setPhone} placeholder={'Telefone'} autoCapitalize="none" keyboardType="phone-pad" />
                                     </View>
                                     <View style={styles.input}>
                                         <FontAwesome5 name="user" size={20} color="#989898" style={{ marginRight: 10 }} />
-                                        <TextInput style={styles.inputBox} value={user} onChangeText={setUser} placeholder={'User'} autoCapitalize="none" />
+                                        <TextInput style={styles.inputBox} value={user} onChangeText={setUser} placeholder={'Usuario'} autoCapitalize="none" />
                                     </View>
                                     <View style={styles.input}>
                                         <MaterialIcons name="lock-outline" size={20} color="#989898" style={{ marginRight: 10 }} />
-                                        <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Password'} placeholderTextColor="#989898" autoCapitalize="none" secureTextEntry={true} />
+                                        <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Senha'} placeholderTextColor="#989898" autoCapitalize="none" secureTextEntry={true} />
                                     </View>
                                     <View style={styles.input}>
                                         <MaterialIcons name="lock-outline" size={20} color="#989898" style={{ marginRight: 10 }} />
-                                        <TextInput style={styles.inputBox} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={'Confirm Passowrd'} autoCapitalize="none" secureTextEntry={true} />
+                                        <TextInput style={styles.inputBox} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={'Confirmar Senha'} autoCapitalize="none" secureTextEntry={true} />
                                     </View>
                                 </View>
                                 <View style={styles.boxButtons}>
                                     <View style={styles.buttonContainer}>
-                                        <Button title="SignUp" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }}  onPress={apiAuthentication} />
+                                        <Button title="Cadastrar" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }} onPress={() => apiAuthentication()}  />
                                     </View>
                                 </View>
                             </View>
