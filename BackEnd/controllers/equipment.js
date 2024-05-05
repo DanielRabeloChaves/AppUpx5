@@ -16,10 +16,12 @@ async function addNewEquipmentController(req, res, next) {
       if (decryptToken.type_access_user_id == 2) // DEFAULT
         return res.status(200).json({ error: "Acesso negado." });
       
-      const data = req.body;
-      if(!data.name || !data.id_user || !data.id_sector || !data.id_status_calibration)
+      let data = req.body;
+    
+      if(!data.name || !data.id_sector || !data.id_status_calibration || !data.description || !data.get_equipment || !data.return_equipment)
         return res.status(200).json({ error: "Necessario inserir todas as informaçõe." });
-              
+
+      data.id_user = decryptToken.id
       const newEquipement = await modelAddNewEquipment(data);
       if (newEquipement.affectedRows == 0)
         return res.status(401).json({ error: "Erro ao criar novo equipamento."});
@@ -30,6 +32,7 @@ async function addNewEquipmentController(req, res, next) {
 
       res.status(200).json({menssage: "Equipamento criado com sucesso.", data: newEquipement, status: "Sucesso"});
   } catch (err) {
+    console.log(err)
     return res.status(404).json({ error: "Erro ao inserir novo equipamento",  detailedError: err.message, stackTrace: err.stack });
   }
 }

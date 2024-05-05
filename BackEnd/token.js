@@ -9,13 +9,11 @@ const secretKey = crypto.createHash('sha256').update(hash).digest('hex');
 function verifyToken(req, res, next) {
   try {
       let token;
-
       if(req.params.token){
         token = req?.params?.token?.replace(/Bearer /gi, '');
       }else{
         token = req?.headers?.authorization?.replace(/Bearer /gi, '');
       }
-
       const decoded = jwt.verify(token, secretKey);
       if (decoded.exp < Date.now() / 1000) {
           return res.status(401).json({token: false, mensagem: 'Token expirado.' });
@@ -26,6 +24,7 @@ function verifyToken(req, res, next) {
       req.user = decoded.user;
       next();
     } catch (err) {
+      console.log(err)
       return res.status(401).json({token: false, mensagem: 'Token inválido.' });
     }
   }

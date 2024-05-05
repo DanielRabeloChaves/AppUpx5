@@ -1,9 +1,8 @@
 const insertNewEquipment = `INSERT INTO equipment (name,
     description,
-    photo, 
     create_date, 
     edit_date)
-    VALUE (?, ?, ?, NOW(), NOW())`;
+    VALUE (?, ?, NOW(), NOW())`;
 
 const insertNewHistoryEquipment = `INSERT INTO equipment_history (id_equipment,
     id_user,

@@ -11,13 +11,13 @@ async function modelAddNewEquipment(dataEquipment){
     conn = await ConnectionDB.getConnection();
     try{
         const data = {
-            name: dataEquipment.name,
-            description: dataEquipment.description,
-            photo: dataEquipment.photo
+          name: dataEquipment.name,
+          description: dataEquipment.description
         }
         const [result] = await conn.execute(insertNewEquipment, Object.values(data));
         return result;
     }catch(err){
+        console.log(err)
         console.log({menssage: "Erro ao adicionar novo equipamento"})
     }finally{
         if(conn)
