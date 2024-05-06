@@ -4,7 +4,8 @@ const {
     insertNewHistoryEquipment,
     getAllEquipments,
     getEquipmentByID,
-    updateEquipment
+    updateEquipment,
+    getEquipmentHistoryById
   } = require('./query');
 
 async function modelAddNewEquipment(dataEquipment){
@@ -25,12 +26,12 @@ async function modelAddNewEquipment(dataEquipment){
     }
 }
 
-async function modelAddNewHistoryEquipment(dataEquipment, idEquipment){
+async function modelAddNewHistoryEquipment(dataEquipment, idEquipment, id_user){
     conn = await ConnectionDB.getConnection();
     try{
         const data = {
             id_equipment: idEquipment,
-            id_user: dataEquipment.id_user,
+            id_user: id_user,
             id_sector: dataEquipment.id_sector,
             id_status_calibration: dataEquipment.id_status_calibration,
             local: dataEquipment.local,
@@ -64,7 +65,13 @@ async function modelAllEquipments(){
 async function modelEquipmentById(id){
     conn = await ConnectionDB.getConnection();
     try{
-      const [[result]] = await conn.execute(getEquipmentByID, [id]);
+      let result
+      [[result]] = await conn.execute(getEquipmentByID, [id]);
+      let [historyEquipment] = await conn.execute(getEquipmentHistoryById, [id])
+      historyEquipment.map(item => {
+        item.local = JSON.parse(item.local) 
+      })
+      result.history = historyEquipment
       return result;
     }catch(err){
       console.log({menssage: "Erro ao buscar equipamento por id"})

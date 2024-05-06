@@ -6,22 +6,26 @@ import { Button } from '@rneui/themed';
 import { defaultStyles, font } from '../../theme';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../config/api'
+import baseUrl from '../../config/baseUrl';
+import Cards from './cards'
+import Footer from '../../components/footer';
 
 export default () => {
   const navigation = useNavigation();
-  const handlePress = (path) => {
-    navigation.navigate(path);
-};
-  
+    const handlePress = (path) => {
+      navigation.navigate(path);
+  };
+
   return (
     <ScrollView style={{marginTop: Constants.statusBarHeight,}}>
       <View style={styles.container}>
         <Header />
         <View style={styles.body}>
           <Button title={"Cadastrar novo equipamanto"} titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} onPress={() => handlePress("createEquip")} />
+          <Cards />
         </View>
-        
       </View>
+      < Footer/>
     </ScrollView>
   );
 };

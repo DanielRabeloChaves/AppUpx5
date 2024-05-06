@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router();
 const { 
-    uploadEquipmentFileController
+    uploadEquipmentFileController,
+    getFileEquipmentByIdController
  } = require('../controllers/file');
 const multer = require('multer');
 const fs = require('fs');
@@ -9,6 +10,7 @@ const { secretKey } = require('../token');
 const jwt = require('jsonwebtoken');
 
 const { verifyToken } = require('../token');
+const { verify } = require('crypto');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -48,5 +50,6 @@ const storage = multer.diskStorage({
 let upload = multer({ storage: storage })
 
 router.post('/equipment/postfile', verifyToken, upload.single('file'), uploadEquipmentFileController);
+router.get('/equipment/', getFileEquipmentByIdController);
 
 module.exports = router;

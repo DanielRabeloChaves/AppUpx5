@@ -89,7 +89,7 @@ async function insertEquipmentHistoryController(req, res, next){
 
         const data = req.body;
         const id = req.query.id
-        const newHistoryEquipement = await modelAddNewHistoryEquipment(data, id);
+        const newHistoryEquipement = await modelAddNewHistoryEquipment(data, id, decryptToken.id);
         if (newHistoryEquipement.affectedRows == 0)
             return res.status(401).json({ error: "Erro ao criar historico equipamento."});
 

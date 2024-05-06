@@ -14,14 +14,18 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import defaultImage from '../../Img/defaultImage.png';
 import Footer from '../../components/footer';
+import baseUrl from '../../config/baseUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const inputWidthScale = 0.8;
 const inputWidth = windowWidth * inputWidthScale;
 
-export default () => {
+export default (equipmentId) => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
+    const [equipementInfo, setEquipementInfo] = useState();
+    const [token, setToken] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -36,16 +40,13 @@ export default () => {
       }, []);
     
     const navigation = useNavigation();
-    const handlePress = (path) => {
-        navigation.navigate(path);
+    const handlePress = (path, data) => {
+        navigation.navigate(path, data);
     };
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
     const [id_sector, setId_sector] = useState('');
     const [sectorList, setSectorList] = useState([]);
     const [id_status_calibration, setId_status_calibration] = useState('');
     const [statusCalibrationList, setStatusCalibrationList] = useState([]);
-    const [image, setImage] = useState(null);
     const [get_equipment, setGet_equipment] = useState(new Date());
     const [showGetEquipment, setShowGetEquipment] = useState(false);
     const [return_equipment, setReturn_equipment] = useState(new Date());
@@ -71,8 +72,6 @@ export default () => {
     const showToastWithGravityAndOffset = (text) => { ToastAndroid.showWithGravityAndOffset( text, ToastAndroid.LONG, ToastAndroid.TOP, 25, 50);};
     const equiptmentData = () => {
         return data = {
-            name: name,
-            description: description,
             id_sector: id_sector,
             id_status_calibration: id_status_calibration,
             local: location,
@@ -80,65 +79,19 @@ export default () => {
             return_equipment: return_equipment
         }
     }
-    const selectImage = async () => {
+   
+    const apiCreateNewHistoryEquipment = async () => {
         try {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-                alert('A permissão para acessar a galeria foi negada.');
-                return;
-            }
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-            });
-            if (!result.canceled && result.assets.length > 0) {
-                const selectedImage = result.assets[0];
-                setImage(selectedImage.uri);
-            } else {
-                alert('Nenhuma imagem selecionada.');
-            }
-        } catch (error) {
-            console.error('Erro ao selecionar a imagem:', error);
-            alert('Ocorreu um erro ao selecionar a imagem. Por favor, tente novamente.');
-        }
-    };
-    const apiCreateEquipment = async () => {
-        try {
-          const response = await api.post("/equipment/create", equiptmentData());
+          const response = await api.post(`/equipment/history/create?id=${equipmentId.route.params}`, equiptmentData());
           const data = response.data;
           Keyboard.dismiss();
           showToastWithGravityAndOffset(data.menssage || data.error);
           if(data.status && data.status === "Sucesso"){
-            apiPostImgEquipment(data.data.insertId);
-            handlePress("home")
+            handlePress("detailEquipment", equipmentId.route.params)
           }
-
         } catch (error) {
             console.log("error: ", error)
             showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
-        }
-    }
-
-    const apiPostImgEquipment = async (idEquipment) => {
-        try {
-            const formData = new FormData();
-            const newDate = new Date();
-            const formattedDate = `${('0' + newDate.getDate()).slice(-2)}${('0' + (newDate.getMonth() + 1)).slice(-2)}${newDate.getFullYear()}`;
-            
-            const uriParts = image.split('/');
-            const fileName = uriParts[uriParts.length - 1];
-
-            // Adiciona o nome do arquivo ao FormData com o ID do equipamento e a data
-            formData.append('file', {
-                uri: image,
-                type: 'image/*',
-                name: `${idEquipment}-${formattedDate}-${fileName}`, // Aqui você ajusta a composição do nome do arquivo conforme necessário
-            });
-            const response = await apiFile.post(`/file/equipment/postfile?equipment=${idEquipment}`, formData);
-        } catch (error) {
-            console.error('Erro ao fazer upload da imagem:', error);
         }
     }
 
@@ -176,34 +129,45 @@ export default () => {
         }
       }
 
+      const apiGetEquipmentById = async () => {
+        try {
+          const response = await api.get(`/equipment?id=${equipmentId.route.params}`);
+          const tempToken = await AsyncStorage.getItem('token');
+          setEquipementInfo(response.data)
+          setToken(tempToken);
+        } catch (error) {
+            showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
+            console.log("error: ", error)
+        }
+    }
+
       useEffect(() => {
         equiptmentData();
         apiGetSectors();
         apiGetStatusCalibration();
+        apiGetEquipmentById();
       }, []);
 
   return (
     <ScrollView style={{marginTop: Constants.statusBarHeight,}}>
       <View style={styles.container}>
         <Header />
+        <Image
+                style={styles.image}
+                source={{ uri: `${baseUrl}/file/equipment?equipment=${equipmentId.route.params}&token=${token}` }}
+                resizeMode="cover"
+        />
+        
         <View style={styles.body}>
+            <View style={styles.titleBox}>
+                <Text ellipsizeMode="tail" style={styles.title}>Nome do equipamento:</Text>
+                <Text style={styles.text}>{equipementInfo?.name}</Text>
+              </View>
+              <View style={styles.textBox}>
+                <Text ellipsizeMode="tail" style={styles.title}>Descrição:</Text>
+                <Text ellipsizeMode="tail" style={styles.text}>{equipementInfo?.description}</Text>
+            </View>
             <View>
-                <View>
-                    <TouchableOpacity style={styles.inputImage} onPress={selectImage}>
-                        {image 
-                        ? <Image source={{ uri: image }} style={styles.inputImage}/> 
-                        : <Image source={defaultImage} style={styles.inputImage} />}
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.input}>
-                    <MaterialIcons name="all-inbox"  size={20} color="#989898" style={{ marginRight: 10 }} />
-                    <TextInput style={styles.inputBox} value={name} onChangeText={setName} placeholder={'Nome do equipamento'} autoCapitalize="none" />
-                </View>
-                <View style={styles.input}>
-                    <MaterialIcons name="short-text"  size={20} color="#989898" style={{ marginRight: 10 }}/>
-                    <TextInput style={styles.inputBox} value={description} onChangeText={setDescription} placeholder={'Descrição do equipamento'} autoCapitalize="none" />
-                </View>
-                
                 <SelectList 
                     boxStyles={styles.input}
                     inputStyles={{ color: defaultColor.grey}}
@@ -256,7 +220,7 @@ export default () => {
                 )}
             </View>
             <View style={styles.boxButtons}>
-                <Button title={"Salvar"} titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} onPress={() => apiCreateEquipment()} />
+                <Button title={"Salvar"} titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} onPress={() => apiCreateNewHistoryEquipment()} />
             </View>
         </View>
       </View>
@@ -297,5 +261,25 @@ const styles = StyleSheet.create({
         height: 200,
         width: "100%",
         borderRadius: 15,
-    }
+    },
+  image: {
+    width: "100%",
+    height: 200,
+  },
+  titleBox: {
+    marginBottom: 20,
+  },
+  title: {
+    fontFamily: font.fontFamily,
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  text: {
+    fontFamily: font.fontFamily,
+    fontSize: 14,
+  },
+  textBox: {
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
 });

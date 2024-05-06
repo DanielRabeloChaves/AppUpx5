@@ -1,6 +1,7 @@
 const { ConnectionDB } = require('../../DataBase/Connection');
 const { 
-    updateImageEquipment
+    updateImageEquipment,
+    queryFileEquipmentById
 } = require('./query');
 
 async function modelInsertEquipmentFile(data) {
@@ -17,7 +18,22 @@ async function modelInsertEquipmentFile(data) {
   }
 }
 
+async function modelGetFileEquipmentById(EquipmentId) {
+    conn = await ConnectionDB.getConnection();
+    try {
+      const [[File]] = await conn.execute(queryFileEquipmentById, [EquipmentId]);
+      return File;
+    } catch(err) {
+      console.log("Erro ao buscar imagem do equipamento.");
+      console.log(err);
+    } finally {
+      if (conn)
+        conn.release();
+    }
+  }
+
 module.exports = { 
-    modelInsertEquipmentFile
+    modelInsertEquipmentFile,
+    modelGetFileEquipmentById
  };
  
