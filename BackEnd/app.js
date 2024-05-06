@@ -31,10 +31,18 @@ app.use((req, res, next)=>{
 
 const routerUser = require('./routes/user') 
 const routerVerifyToken = require('./routes/verifyToken')
+const routerEquipment = require('./routes/equipment') 
+const routerSector = require('./routes/sector') 
+const routerCalibration = require('./routes/Calibration') 
+const routerFile = require('./routes/file') 
 
 try{
     app.use('/api/user', routerUser);    
     app.use('/api/verifytoken', routerVerifyToken);
+    app.use('/api/equipment', routerEquipment);
+    app.use('/api/sector', routerSector);
+    app.use('/api/calibration', routerCalibration);
+    app.use('/api/file', routerFile);
 }catch{
     throw new Error('Erro ao executar as rotas.'); 
 }
@@ -51,6 +59,7 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) =>{
     try{
+        console.log(error)
         res.status(error.status || 500);
         return res.send({
             erro:{

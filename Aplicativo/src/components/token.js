@@ -5,7 +5,7 @@ import { Button } from '@rneui/themed';
 import api from '../config/api'
 import { useNavigation } from '@react-navigation/native'; 
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const inputWidthScale = 0.8;
@@ -58,12 +58,16 @@ export default ({data, type}) => {
         const data = response.data;
         Keyboard.dismiss();
         showToastWithGravityAndOffset(data.menssage || data.error);
-        if(data.status && data.status == "Sucesso"){
+        if(data.status == "Sucesso"){
+          await AsyncStorage.setItem('token', data.token);
+          const userToken = await AsyncStorage.getItem('token');
           handlePress("home")
         }
       } catch (error) {
           showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
           console.log(error)
+      }finally{
+        resetFields();
       }
   }
 
@@ -74,7 +78,6 @@ export default ({data, type}) => {
           dataUser.password = password
           dataUser.confirm_passowrd = confirmPassword
         }
-        resetFields()
         const response = await api.post("/user/forgetpassword", dataUser);
         const data = response.data;
         if(data.status === "Preencher Campos"){
@@ -89,6 +92,8 @@ export default ({data, type}) => {
     } catch (error) {
         showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
         console.log(error)
+    }finally{
+      resetFields();
     }
   }
 
