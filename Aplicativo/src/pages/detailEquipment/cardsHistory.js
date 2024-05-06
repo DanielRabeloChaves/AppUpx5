@@ -102,7 +102,7 @@ export default ({equipmentDataHistory}) => {
                         </View>
                         <View style={styles.infoBoxBody}>
                             <View>
-                                <Text ellipsizeMode="tail" style={styles.title}>Agendado:</Text>
+                                <Text ellipsizeMode="tail" style={styles.title}>Calibragem:</Text>
                                 <Text ellipsizeMode="tail" style={styles.text}>{moment(item?.get_equipment).format('DD/MM/YYYY')}</Text>
                             </View>
                             <View>

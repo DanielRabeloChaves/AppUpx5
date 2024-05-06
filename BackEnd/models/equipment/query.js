@@ -14,7 +14,7 @@ const insertNewHistoryEquipment = `INSERT INTO equipment_history (id_equipment,
     edit_date)
     VALUE (?, ?, ?, ?, ?, ?, ?, NOW())`;
 
-const getAllEquipments = `SELECT * FROM equipment ORDER BY name`
+const getAllEquipments = `SELECT * FROM equipment ORDER BY edit_date desc`
 
 const getEquipmentByID = `SELECT * FROM equipment where id = ?`
 

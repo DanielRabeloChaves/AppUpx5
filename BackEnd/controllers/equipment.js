@@ -26,7 +26,7 @@ async function addNewEquipmentController(req, res, next) {
       if (newEquipement.affectedRows == 0)
         return res.status(401).json({ error: "Erro ao criar novo equipamento."});
 
-      const newHistoryEquipement = await modelAddNewHistoryEquipment(data, newEquipement.insertId);
+      const newHistoryEquipement = await modelAddNewHistoryEquipment(data, newEquipement.insertId, decryptToken.id);
       if (newHistoryEquipement.affectedRows == 0)
         return res.status(401).json({ error: "Erro ao criar historico equipamento."});
 

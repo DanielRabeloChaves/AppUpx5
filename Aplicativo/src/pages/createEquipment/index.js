@@ -106,14 +106,19 @@ export default () => {
     };
     const apiCreateEquipment = async () => {
         try {
-          const response = await api.post("/equipment/create", equiptmentData());
-          const data = response.data;
-          Keyboard.dismiss();
-          showToastWithGravityAndOffset(data.menssage || data.error);
-          if(data.status && data.status === "Sucesso"){
-            apiPostImgEquipment(data.data.insertId);
-            handlePress("home")
-          }
+            if(image){
+                const response = await api.post("/equipment/create", equiptmentData());
+                const data = response.data;
+                Keyboard.dismiss();
+                showToastWithGravityAndOffset(data.menssage || data.error);
+                if(data.status && data.status === "Sucesso"){
+                  apiPostImgEquipment(data.data.insertId);
+                  handlePress("home")
+                }
+            }else{
+                showToastWithGravityAndOffset("Necessario inserir uma imagem.");
+            }
+         
 
         } catch (error) {
             console.log("error: ", error)
