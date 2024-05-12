@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "UPX5",
+    "name": "Trabalho UPX5",
     "slug": "UPX5",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#014681"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,6 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config":{
+        "googleMaps":{
+          "apiKey": "AIzaSyBIkRQydLBQXb9b2Rj0J2fw-rQvyspgHVM"
+        }
+      },
+      "package": "com.danielrabelo.upx5",
+      "adaptiveIcon": {
+        "backgroundColor": "#014681",
+        "foregroundImage": "./assets/icon.png"
       }
     },
     "web": {
