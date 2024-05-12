@@ -107,7 +107,8 @@ async function authenticationController(req, res, next) {
   try {
         if(!req.body.login || !req.body.password)
           return res.status(200).json({ error: "Necessario preencher usuario e senha." });
-        
+
+        console.log(req.body)
         const user = await modelUserByUserLogin(req.body.login);
         if(!user)
           return res.status(200).json({ error: "Login ou Senha incorreto." });

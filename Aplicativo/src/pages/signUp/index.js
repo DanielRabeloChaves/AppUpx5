@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     },
     inputBox: {
         height: 40,
-        width: "95%",
+        width: "90%",
         color: defaultColor.grey
     },
     boxButtons: {

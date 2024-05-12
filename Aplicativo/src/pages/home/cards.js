@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Text, Linking, ToastAndroid, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Text, Linking, ToastAndroid, TouchableOpacity, TextInput, Dimensions } from 'react-native';
 import { Button } from '@rneui/themed';
 import { defaultStyles, defaultColor, font } from '../../theme';
 import baseUrl from '../../config/baseUrl'
@@ -9,9 +9,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
+const windowWidth = Dimensions.get('window').width;
+const inputWidthScale = 0.8;
+const inputWidth = windowWidth * inputWidthScale;
+
 export default () => {
     const [equipmentList, setEquipmentList] = useState([]);
     const [token, setToken] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [filteredEquipmentList, setFilteredEquipmentList] = useState([]);
+    const handleSearch = (text) => {
+      setSearchText(text);
+      const filteredList = equipmentList.filter(item => {
+        return item.name.toLowerCase().includes(text.toLowerCase());
+        // Você pode adicionar mais condições de filtro conforme necessário
+      });
+      setFilteredEquipmentList(filteredList);
+    };
+    
 
     const navigation = useNavigation();
     const handlePress = (path, data) => {
@@ -44,7 +59,20 @@ export default () => {
 
   return (
     <View style={styles.container}>
-      {equipmentList?.map((item, index) => {
+      <View style={styles.searchBox}>
+        <View style={styles.input}>
+            <FontAwesome5 name="search" size={20} color="#989898" style={{ marginRight: 10 }}  />
+            <TextInput style={styles.inputBox}  
+              placeholder={'Pesquisa'} 
+              onChangeText={handleSearch}
+              value={searchText}
+            />
+        </View>
+        <TouchableOpacity style={styles.buttonQrCode}  onPress={() => handlePress("qrCode")}>
+              <MaterialIcons name="qr-code-scanner" size={26} color="white" />
+        </TouchableOpacity>
+      </View>
+      {(searchText === '' ? equipmentList : filteredEquipmentList).map((item, index) => {
         return (
           <TouchableOpacity style={styles.cards} key={index} onPress={() => handlePress("detailEquipment", item.id)}>
              <Image
@@ -112,5 +140,38 @@ const styles = StyleSheet.create({
     zIndex: 999,
     right: 5,
     top: 30
-  }
+  },
+  buttonQrCode:{
+    marginTop: 30,
+    height: 47,
+    width: 47,
+    backgroundColor: defaultColor.buttonColor,
+    zIndex: 999,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    borderRadius: 30
+  },
+  input: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: "row",
+    alignItems: "center",
+    height: 47,
+    width: "80%",
+    elevation: 5,
+    borderRadius: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 30,
+},
+inputBox: {
+    height: 40,
+    width: "90%",
+    color: defaultColor.grey
+},
+searchBox:{
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+}
 });

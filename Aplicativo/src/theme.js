@@ -6,6 +6,7 @@ const defaultColor = {
   primaryColor: "#014681",
   white: "#FFFFFF",
   grey: "#5E5E5E",
+  profile: "#40576B",
 }
 
 const font = {

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ScrollView, Image, Linking  } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Image, Linking, TouchableOpacity  } from 'react-native';
 import Constants from 'expo-constants';
 import Header from '../../components/header';
 import { Button } from '@rneui/themed';
-import { defaultStyles, font } from '../../theme';
+import { defaultStyles, font, defaultColor} from '../../theme';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../config/api'
 import baseUrl from '../../config/baseUrl';
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   body: {
-    padding: 20
-  }
+    padding: 20,
+  },
+ 
 });

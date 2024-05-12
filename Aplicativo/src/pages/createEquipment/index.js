@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     },
     inputBox: {
         height: 40,
-        width: "100%",
+        width: "90%",
         color: defaultColor.grey,
     },
     inputImage: {
