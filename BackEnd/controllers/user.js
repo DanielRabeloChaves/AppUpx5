@@ -15,8 +15,6 @@ const {
   deleteLoginToken,
   newPassword
  } = require('../models/user/user');
- const moment = require('moment-timezone');
- moment.tz.setDefault('America/Sao_Paulo');
 
 function generateTokenLogin(length) {
   try{

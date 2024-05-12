@@ -76,10 +76,12 @@ async function getFileEquipmentByIdController(req, res, next) {
       const token = req.query.token;
     
       const resultEquipmentImg = await modelGetFileEquipmentById(projectId)
+      console.log(resultEquipmentImg)
       if(!resultEquipmentImg || !resultEquipmentImg.photo)
         return res.status(200).json({ error: "Nao possui equipamento ou imagem com esse ID." });
       
       if (fs.existsSync(resultEquipmentImg.photo)) {
+        console.log("Entrou no if")
         const extensao = path.extname(resultEquipmentImg.photo);
         const contentType = getContentType(extensao);
         res.setHeader('Content-disposition', `attachment; filename=${resultEquipmentImg.photo}`);
@@ -88,6 +90,7 @@ async function getFileEquipmentByIdController(req, res, next) {
         const fileStream = fs.createReadStream(resultEquipmentImg.photo);
         fileStream.pipe(res);
       } else {
+        console.log("Entrou no else")
         return res.status(200).json({ error: "Arquivo nao encontrado." });
       }
     } catch(err) {
