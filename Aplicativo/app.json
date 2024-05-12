@@ -19,22 +19,23 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#014681",
+        "foregroundImage": "./assets/icon.png"
       },
-      "config":{
-        "googleMaps":{
+      "config": {
+        "googleMaps": {
           "apiKey": "AIzaSyBIkRQydLBQXb9b2Rj0J2fw-rQvyspgHVM"
         }
       },
-      "package": "com.danielrabelo.upx5",
-      "adaptiveIcon": {
-        "backgroundColor": "#014681",
-        "foregroundImage": "./assets/icon.png"
-      }
+      "package": "com.danielrabelo.upx5"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c842e364-0d46-47cc-b7e6-b44ea636c689"
+      }
     }
   }
 }
