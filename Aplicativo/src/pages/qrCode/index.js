@@ -6,6 +6,7 @@ import { defaultStyles, defaultColor, font } from '../../theme';
 import Constants from 'expo-constants';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'; 
+import api from '../../config/api'
 
 export default function App() {
   const showToastWithGravityAndOffset = (text) => { ToastAndroid.showWithGravityAndOffset( text, ToastAndroid.LONG, ToastAndroid.TOP, 25, 50);};
@@ -16,6 +17,7 @@ export default function App() {
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [equipementInfo, setEquipementInfo] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -24,13 +26,30 @@ export default function App() {
     })();
   }, []);
 
+  const apiGetEquipmentById = async (idEquipment) => {
+    try {
+      const response = await api.get(`/equipment?id=${idEquipment}`);
+      setEquipementInfo(response.data)
+    } catch (error) {
+        showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
+        console.log("error: ", error)
+    }
+}
+
+
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     const parsed = queryString.parseUrl(data);
     const equipmentId = parsed.query.equipmentid;
     if(equipmentId && type == 256){
-        showToastWithGravityAndOffset(`QR Code com ID equipamento ${equipmentId}`);
-        navigation.navigate("detailEquipment", equipmentId);
+        apiGetEquipmentById(equipmentId);
+        if(equipementInfo){
+          showToastWithGravityAndOffset(`QR Code com ID equipamento ${equipmentId}`);
+          navigation.navigate("detailEquipment", equipmentId);
+        }else{
+          showToastWithGravityAndOffset(`Equipamento com ID ${equipmentId} não encontrado.`);
+          navigation.navigate("home");
+        }
     }else{
         showToastWithGravityAndOffset("QR Code invalido.");
         navigation.navigate("home");

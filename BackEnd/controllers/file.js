@@ -19,8 +19,6 @@ async function uploadEquipmentFileController(req, res, next) {
         if (decryptToken.type_access_user_id == 2)
             return res.status(200).json({ error: "Acesso negado." });
 
-        console.log(req.body)
-        console.log(req.file)
         const equipmentId = req.query.equipment;
         let dataFile = req.file;
         let data = {};
@@ -78,14 +76,11 @@ async function getFileEquipmentByIdController(req, res, next) {
       const token = req.query.token;
     
       const resultEquipmentImg = await modelGetFileEquipmentById(projectId)
-      console.log(resultEquipmentImg)
       if(!resultEquipmentImg || !resultEquipmentImg.photo)
         return res.status(200).json({ error: "Nao possui equipamento ou imagem com esse ID." });
       
       const filePath = path.join(__dirname, '..', 'uploads', 'equipment', resultEquipmentImg.photo);  
-      console.log(filePath)
       if (fs.existsSync(filePath)) {
-        console.log("Entrou no if")
         const extensao = path.extname(filePath);
         const contentType = getContentType(extensao);
         res.setHeader('Content-disposition', `attachment; filename=${filePath}`);
@@ -94,7 +89,6 @@ async function getFileEquipmentByIdController(req, res, next) {
         const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
       } else {
-        console.log("Entrou no else")
         return res.status(200).json({ error: "Arquivo nao encontrado." });
       }
     } catch(err) {

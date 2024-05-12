@@ -134,12 +134,8 @@ async function authenticationController(req, res, next) {
           return res.status(200).json({menssage: `Token de acesso enviado para o email ${user.email}`, status: "Email Enviado"});
         }
         
-        console.log("Chegou aqui")
-        console.log(req.body)
         const verifyToken = await getLoginToken(req.body.loginToken, user.id);
-        console.log(verifyToken)
         const deleteToken = await deleteLoginToken(user.id)
-        console.log(deleteToken)
         if (deleteToken.affectedRows == 0)
           return res.status(404).json({ error:"Erro ao deletar token."});
 
@@ -152,8 +148,6 @@ async function authenticationController(req, res, next) {
           timeStyle: "short",
           timeZone: "America/Sao_Paulo"
         });
-        console.log(expiration_token)
-        console.log(today)
         if(today > expiration_token)
           return res.status(200).json({ error:"Token de acesso expirado."});
         
