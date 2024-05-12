@@ -41,9 +41,7 @@ async function modelUserByCPF(CPF){
 async function modelUserByUserLogin(login){
   conn = await ConnectionDB.getConnection();
   try{
-    console.log(login)
     const [[user]] = await conn.execute(getUserByLogin, [login]);
-    console.log(user)
     return user;
   }catch(err){
     console.log(err)

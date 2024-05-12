@@ -108,7 +108,6 @@ async function authenticationController(req, res, next) {
         if(!req.body.login || !req.body.password)
           return res.status(200).json({ error: "Necessario preencher usuario e senha." });
 
-        console.log(req.body)
         const user = await modelUserByUserLogin(req.body.login);
         if(!user)
           return res.status(200).json({ error: "Login ou Senha incorreto." });
@@ -134,9 +133,13 @@ async function authenticationController(req, res, next) {
           
           return res.status(200).json({menssage: `Token de acesso enviado para o email ${user.email}`, status: "Email Enviado"});
         }
-       
+        
+        console.log("Chegou aqui")
+        console.log(req.body)
         const verifyToken = await getLoginToken(req.body.loginToken, user.id);
+        console.log(verifyToken)
         const deleteToken = await deleteLoginToken(user.id)
+        console.log(deleteToken)
         if (deleteToken.affectedRows == 0)
           return res.status(404).json({ error:"Erro ao deletar token."});
 
