@@ -5,7 +5,7 @@ const insertNewUser = `INSERT INTO user (name,
     cpf, 
     password, 
     login)
-    VALUE (?, 2, ?, ?, ?)`;
+    VALUE (?, 1, ?, ?, ?)`;
 
 const insertNewUserContact = `INSERT INTO contact_user (user_id,
     email,
