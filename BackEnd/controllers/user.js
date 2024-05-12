@@ -148,6 +148,8 @@ async function authenticationController(req, res, next) {
 
         const expiration_token = new Date(verifyToken.expired_date);
         const today = new Date();
+        console.log(expiration_token)
+        console.log(today)
         if(today > expiration_token)
           return res.status(200).json({ error:"Token de acesso expirado."});
         
