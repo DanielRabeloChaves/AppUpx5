@@ -19,10 +19,12 @@ async function uploadEquipmentFileController(req, res, next) {
         if (decryptToken.type_access_user_id == 2)
             return res.status(200).json({ error: "Acesso negado." });
 
+        console.log(req.body)
+        console.log(req.file)
         const equipmentId = req.query.equipment;
         let dataFile = req.file;
         let data = {};
-        data.path = req.file.path;
+        data.path = req.file.originalname;
         data.id = equipmentId;
 
         if ((/image/gi).test(dataFile.mimetype)) {
@@ -80,14 +82,16 @@ async function getFileEquipmentByIdController(req, res, next) {
       if(!resultEquipmentImg || !resultEquipmentImg.photo)
         return res.status(200).json({ error: "Nao possui equipamento ou imagem com esse ID." });
       
-      if (fs.existsSync(resultEquipmentImg.photo)) {
+      const filePath = path.join(__dirname, '..', 'uploads', 'equipment', resultEquipmentImg.photo);  
+      console.log(filePath)
+      if (fs.existsSync(filePath)) {
         console.log("Entrou no if")
-        const extensao = path.extname(resultEquipmentImg.photo);
+        const extensao = path.extname(filePath);
         const contentType = getContentType(extensao);
-        res.setHeader('Content-disposition', `attachment; filename=${resultEquipmentImg.photo}`);
+        res.setHeader('Content-disposition', `attachment; filename=${filePath}`);
         res.setHeader('Content-type', contentType);
         res.setHeader('Authorization', `Bearer ${token}`);
-        const fileStream = fs.createReadStream(resultEquipmentImg.photo);
+        const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
       } else {
         console.log("Entrou no else")
