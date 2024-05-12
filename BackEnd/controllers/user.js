@@ -17,7 +17,7 @@ const {
  } = require('../models/user/user');
  const moment = require('moment-timezone');
  moment.tz.setDefault('America/Sao_Paulo');
- 
+
 function generateTokenLogin(length) {
   try{
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -149,7 +149,11 @@ async function authenticationController(req, res, next) {
           return res.status(200).json({ error: "Token de acesso invalido."});
 
         const expiration_token = new Date(verifyToken.expired_date);
-        const today = new Date();
+        const today = new Date().toLocaleString("pt-Br",{
+          dateStyle: "short",
+          timeStyle: "short",
+          timeZone: "America/Sao_Paulo"
+        });
         console.log(expiration_token)
         console.log(today)
         if(today > expiration_token)
@@ -159,7 +163,11 @@ async function authenticationController(req, res, next) {
           return res.status(200).json({ error: "Usuario bloqueado." });
 
         let updateDataUser = {
-          last_access_date: new Date(),
+          last_access_date: new Date().toLocaleString("pt-Br",{
+            dateStyle: "short",
+            timeStyle: "short",
+            timeZone: "America/Sao_Paulo"
+          }),
           first_access: 0, 
           id: user.id
         }
@@ -222,7 +230,11 @@ async function forgetPasswordController(req, res, next) {
     }
       
     const expiration_token = new Date(verifyToken.expired_date);
-    const today = new Date();
+    const today = new Date().toLocaleString("pt-Br",{
+      dateStyle: "short",
+      timeStyle: "short",
+      timeZone: "America/Sao_Paulo"
+    });
     if(today > expiration_token){
       const deleteToken = await deleteLoginToken(user.id)
       if (deleteToken.affectedRows == 0)
