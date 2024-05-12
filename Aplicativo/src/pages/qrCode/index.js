@@ -17,7 +17,6 @@ export default function App() {
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [equipementInfo, setEquipementInfo] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -29,26 +28,25 @@ export default function App() {
   const apiGetEquipmentById = async (idEquipment) => {
     try {
       const response = await api.get(`/equipment?id=${idEquipment}`);
-      setEquipementInfo(response.data)
+      return response.data
     } catch (error) {
         showToastWithGravityAndOffset("Ocorreu um erro desconhecido.");
-        console.log("error: ", error)
     }
 }
 
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     const parsed = queryString.parseUrl(data);
     const equipmentId = parsed.query.equipmentid;
     if(equipmentId && type == 256){
-        apiGetEquipmentById(equipmentId);
-        if(equipementInfo){
+        const resultEquipment = await apiGetEquipmentById(equipmentId);
+        if(resultEquipment.error){
+          showToastWithGravityAndOffset(resultEquipment.error);
+          navigation.navigate("home");
+        }else{
           showToastWithGravityAndOffset(`QR Code com ID equipamento ${equipmentId}`);
           navigation.navigate("detailEquipment", equipmentId);
-        }else{
-          showToastWithGravityAndOffset(`Equipamento com ID ${equipmentId} não encontrado.`);
-          navigation.navigate("home");
         }
     }else{
         showToastWithGravityAndOffset("QR Code invalido.");
