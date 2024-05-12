@@ -34,10 +34,10 @@ function generateTokenLogin(length) {
 
 async function getAllUserController(req, res, next){
     try{
-      const token = req?.headers?.authorization?.replace(/Bearer /gi, '');
-      const decryptToken = jwt.verify(token, secretKey);
-      if (decryptToken.type_access_user_id != 1) // ADMIN
-        return res.status(200).json({ error: "Acesso negado." });
+      // const token = req?.headers?.authorization?.replace(/Bearer /gi, '');
+      // const decryptToken = jwt.verify(token, secretKey);
+      // if (decryptToken.type_access_user_id != 1) // ADMIN
+      //   return res.status(200).json({ error: "Acesso negado." });
 
       const user = await modelAllUser();
       if(!user)
