@@ -23,6 +23,7 @@ export default ({data, type}) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userForgetPassword, setUserForgetPassword] = useState({});
   const [inputValues, setInputValues] = useState(['', '', '', '', '']);
+  const [visibleModalToken, setVisibleModalToken] = useState(true);
 
   const char1Ref = useRef(null);
   const char2Ref = useRef(null);
@@ -61,6 +62,7 @@ export default ({data, type}) => {
         if(data.status == "Sucesso"){
           await AsyncStorage.setItem('token', data.token);
           const userToken = await AsyncStorage.getItem('token');
+          setVisibleModalToken(false);
           handlePress("home")
         }
       } catch (error) {
@@ -116,80 +118,84 @@ export default ({data, type}) => {
   };
 
   return (
-    <View style={styles.mainTokenBox}>
-       <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={closeModal}
-       >
-          <View style={styles.modalStyle}>
+    <>
+      {visibleModalToken 
+      ? <View style={styles.mainTokenBox}>
+          <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={closeModal}
+          >
+              <View style={styles.modalStyle}>
+                <View style={styles.headerTokenLogin}>
+                  <Text style={styles.titleSpanToken}>Recuperação de Senha</Text>
+                </View>
+                <View style={styles.TextInsertToken}>
+                  <Text style={styles.textSpanToken}>Favor preencher sua nova senha.</Text>
+                </View>
+                <View style={styles.input}>
+                    <MaterialIcons name="lock-outline" size={20} color="#989898" style={{ marginRight: 10 }} />
+                    <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Senha'} placeholderTextColor="#989898" autoCapitalize="none" secureTextEntry={true} />
+                </View>
+                <View style={styles.input}>
+                    <MaterialIcons name="lock-outline" size={20} color="#989898" style={{ marginRight: 10 }} />
+                    <TextInput style={styles.inputBox} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={'Confirmar Senha'} autoCapitalize="none" secureTextEntry={true} />
+                </View>
+                <View style={styles.boxButtons}>
+                    <View style={styles.buttonContainer}>
+                        <Button title="Atualziar" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }}  onPress={() => apiForgetPassword(userForgetPassword)} />
+                    </View>
+                </View>
+              </View>
+              
+              <TouchableOpacity style={styles.CloseModal} onPress={closeModal}></TouchableOpacity>
+          </Modal>
+          <View style={styles.InsertToken}>
             <View style={styles.headerTokenLogin}>
-              <Text style={styles.titleSpanToken}>Recuperação de Senha</Text>
+              <Text style={styles.titleSpanToken}>Autenticação</Text>
             </View>
             <View style={styles.TextInsertToken}>
-              <Text style={styles.textSpanToken}>Favor preencher sua nova senha.</Text>
+              <Text style={styles.textSpanToken}>Um token de acesso foi enviado para o endereço de e-mail. Por favor, verifique sua caixa de entrada.</Text>
+              <Text style={styles.textSpanToken}>Este token expirará após 15 minutos.</Text>
             </View>
-            <View style={styles.input}>
-                <MaterialIcons name="lock-outline" size={20} color="#989898" style={{ marginRight: 10 }} />
-                <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} placeholder={'Senha'} placeholderTextColor="#989898" autoCapitalize="none" secureTextEntry={true} />
+            <View style={styles.InputsToken}>
+              <TextInput
+                ref={char1Ref}
+                style={styles.inputToken}
+                maxLength={1}
+                onChangeText={(text) => handleKeyUp(text, char2Ref, 0)}
+              />
+              <TextInput
+                ref={char2Ref}
+                style={styles.inputToken}
+                maxLength={1}
+                onChangeText={(text) => handleKeyUp(text, char3Ref, 1)}
+              />
+              <TextInput
+                ref={char3Ref}
+                style={styles.inputToken}
+                maxLength={1}
+                onChangeText={(text) => handleKeyUp(text, char4Ref, 2)}
+              />
+              <TextInput
+                ref={char4Ref}
+                style={styles.inputToken}
+                maxLength={1}
+                onChangeText={(text) => handleKeyUp(text, char5Ref, 3)}
+              />
+              <TextInput
+                ref={char5Ref}
+                style={styles.inputToken}
+                maxLength={1}
+                onChangeText={(text) => handleKeyUp(text, char5Ref, 4)}
+              />
             </View>
-            <View style={styles.input}>
-                <MaterialIcons name="lock-outline" size={20} color="#989898" style={{ marginRight: 10 }} />
-                <TextInput style={styles.inputBox} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={'Confirmar Senha'} autoCapitalize="none" secureTextEntry={true} />
-            </View>
-            <View style={styles.boxButtons}>
-                <View style={styles.buttonContainer}>
-                    <Button title="Atualziar" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{ height: 40, width: 230 }}  onPress={() => apiForgetPassword(userForgetPassword)} />
-                </View>
-            </View>
+            <Button title="Enviar" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{height: 40, width: 185}}  onPress={concatenateChars} />
           </View>
-          
-          <TouchableOpacity style={styles.CloseModal} onPress={closeModal}></TouchableOpacity>
-      </Modal>
-      <View style={styles.InsertToken}>
-        <View style={styles.headerTokenLogin}>
-          <Text style={styles.titleSpanToken}>Autenticação</Text>
-        </View>
-        <View style={styles.TextInsertToken}>
-          <Text style={styles.textSpanToken}>Um token de acesso foi enviado para o endereço de e-mail. Por favor, verifique sua caixa de entrada.</Text>
-          <Text style={styles.textSpanToken}>Este token expirará após 15 minutos.</Text>
-        </View>
-        <View style={styles.InputsToken}>
-          <TextInput
-            ref={char1Ref}
-            style={styles.inputToken}
-            maxLength={1}
-            onChangeText={(text) => handleKeyUp(text, char2Ref, 0)}
-          />
-          <TextInput
-            ref={char2Ref}
-            style={styles.inputToken}
-            maxLength={1}
-            onChangeText={(text) => handleKeyUp(text, char3Ref, 1)}
-          />
-          <TextInput
-            ref={char3Ref}
-            style={styles.inputToken}
-            maxLength={1}
-            onChangeText={(text) => handleKeyUp(text, char4Ref, 2)}
-          />
-          <TextInput
-            ref={char4Ref}
-            style={styles.inputToken}
-            maxLength={1}
-            onChangeText={(text) => handleKeyUp(text, char5Ref, 3)}
-          />
-          <TextInput
-            ref={char5Ref}
-            style={styles.inputToken}
-            maxLength={1}
-            onChangeText={(text) => handleKeyUp(text, char5Ref, 4)}
-          />
-        </View>
-        <Button title="Enviar" titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} containerStyle={{height: 40, width: 185}}  onPress={concatenateChars} />
-      </View>
-    </View>
+        </View> 
+      : ''}
+    </>
   );
 };
 
