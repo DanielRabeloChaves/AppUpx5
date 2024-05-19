@@ -59,7 +59,7 @@ export default () => {
       }, []);
 
     return (
-        <KeyboardAvoidingView style={{ flex: 1, marginTop: Constants.statusBarHeight }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Constants.statusBarHeight}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Constants.statusBarHeight}>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
                 <View style={{ flex: 1 }}>
                     <Header type={"login"} />

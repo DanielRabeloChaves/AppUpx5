@@ -47,7 +47,7 @@ export default (equipmentId) => {
     );
 
   return (
-    <ScrollView style={{marginTop: Constants.statusBarHeight,}}>
+    <ScrollView >
       <View style={styles.container}>
         <Header />
         <View style={styles.body}>

@@ -88,7 +88,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Constants.statusBarHeight,
     flex: 1,
     backgroundColor: "black",
     flexDirection: 'column',

@@ -11,7 +11,7 @@ import groupImg from '../../Img/group.jpeg';
 
 export default () => {
   return (
-    <ScrollView style={{marginTop: Constants.statusBarHeight,}}>
+    <ScrollView >
       <View style={styles.container}>
         <View style={styles.content}>
           <Header type={"startPage"} />
