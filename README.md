@@ -31,10 +31,24 @@ Este diagrama representa a estrutura e os relacionamentos dos dados e foi elabor
 [Download App](https://drive.google.com/file/d/1ryYsFyjDAbUom3vHk2cxZ2lP3mWumzQp/view?usp=drive_link)
 
 
-## Documentação do Projeto
+# Documentação do Projeto
 
 *  [Link documentação BackEnd](https://github.com/DanielRabeloChaves/UPX5/tree/main/BackEnd)
 
 *  [Link documentação Aplicativo](https://github.com/DanielRabeloChaves/UPX5/blob/main/Aplicativo/README.md)
+
+
+# Passos para Iniciar o Projeto
+
+Clone o Repositório
+
+```
+git clone https://github.com/DanielRabeloChaves/UPX5.git
+cd UPX5
+```
+Aplicativo: Necessario rodar o aplicativo Expo com um emulador Android ou algum smartPhone que tenha o ExpoGo instalado.
+Backend: A aplicação backend estará acessível na porta 3001 da máquina host.
+
+
 
 
