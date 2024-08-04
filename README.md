@@ -43,8 +43,8 @@ Este diagrama representa a estrutura e os relacionamentos dos dados e foi elabor
 Clone o Repositório
 
 ```
-git clone https://github.com/DanielRabeloChaves/UPX5.git
-cd UPX5
+git clone https://github.com/DanielRabeloChaves/AppUpx5.git
+cd AppUpx5
 ```
 Aplicativo: Necessario rodar o aplicativo Expo com um emulador Android ou algum smartPhone que tenha o ExpoGo instalado.
 Backend: A aplicação backend estará acessível na porta 3001 da máquina host.
