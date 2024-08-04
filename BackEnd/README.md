@@ -28,16 +28,20 @@ npm install
 Esse arquivo vai conter as variaveis de ambiente para conexão com banco de dados, chaves de acesso de APIs e Hash de tokens. Segue estrutura desse arquivo:
 
 ```
-DB_dialect=mysql
-
 DB_host=host
 DB_user=user
 DB_password=password
-DB_database=database
+DB_database=nameDB
 DB_port=3306
 
-Ambient_Dev=true
-Ambient_Language=pt-br
+SecretKEy_hash=hashAPI
+
+#User Email
+EMAIL_user = email
+EMAIL_pass = password
+EMAIL_host = "smtp.host.com"
+EMAIL_port = port
+EMAIL_secure = true 
 ```
 
 # Rodar a aplicação:

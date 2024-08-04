@@ -24,7 +24,7 @@
       },
       "config": {
         "googleMaps": {
-          "apiKey": "API_KEY_HERE"
+          "apiKey": "KEY_MAPS_HERE"
         }
       },
       "package": "com.danielrabelo.upx5"

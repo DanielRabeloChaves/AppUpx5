@@ -2,9 +2,9 @@ require('dotenv').config();
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.titan.email",
-  port: 465,
-  secure: true, // Use `true` for port 465, `false` for all other ports
+  host: process.env.EMAIL_host,
+  port: process.env.EMAIL_port,
+  secure: process.env.EMAIL_secure, // Use `true` for port 465, `false` for all other ports
   auth: {
     user: process.env.EMAIL_user,
     pass: process.env.EMAIL_pass,

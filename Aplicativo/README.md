@@ -36,14 +36,10 @@ Instalar as dependências:
 npm install
 ```
 
-Adicionar a Key para utilizar o google maps no arquivo ```app.json```:
-
+Adicionar arquivo .env 
 ```
-"config": {
-        "googleMaps": {
-          "apiKey": "API_KEY_HERE"
-        }
-      },
+EXPO_PUBLIC_API_URL=http://192.168.100.89:3001/api
+GOOGLE_MAPS_API_KEY=KEY_MAPS_HERE
 ```
 
 Inicie o servidor de desenvolvimento:
