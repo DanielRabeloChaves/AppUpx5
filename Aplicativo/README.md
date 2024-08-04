@@ -54,6 +54,7 @@ expo start
 ```
 
 # Estrutura do Código
+```
 assets/ - Arquivos de mídia, como imagens.
 src/ - Código-fonte principal.
 Img/ - Imagens usadas no aplicativo.
@@ -63,4 +64,4 @@ pages/ - Páginas e telas do aplicativo.
 util/ - Utilitários e funções auxiliares.
 App.js - Componente principal do aplicativo.
 theme.js - Configuração de temas e estilos.
-
+```
