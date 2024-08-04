@@ -33,5 +33,8 @@ Este diagrama representa a estrutura e os relacionamentos dos dados e foi elabor
 
 ## Documentação do Projeto
 
-[Link documentação BackEnd](https://github.com/DanielRabeloChaves/UPX5/tree/main/BackEnd)
+*  [Link documentação BackEnd](https://github.com/DanielRabeloChaves/UPX5/tree/main/BackEnd)
+
+*  [Link documentação Aplicativo](https://github.com/DanielRabeloChaves/UPX5/blob/main/Aplicativo/README.md)
+
 
