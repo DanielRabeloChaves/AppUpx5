@@ -46,8 +46,9 @@ Clone o Repositório
 git clone https://github.com/DanielRabeloChaves/AppUpx5.git
 cd AppUpx5
 ```
-Aplicativo: Necessario rodar o aplicativo Expo com um emulador Android ou algum smartPhone que tenha o ExpoGo instalado.
-Backend: A aplicação backend estará acessível na porta 3001 da máquina host.
+
+*   Aplicativo: Necessario rodar o aplicativo Expo com um emulador Android ou algum smartPhone que tenha o ExpoGo instalado.
+*   Backend: A aplicação backend estará acessível na porta 3001 da máquina host.
 
 
 
