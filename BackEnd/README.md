@@ -40,3 +40,32 @@ Ambient_Dev=true
 Ambient_Language=pt-br
 ```
 
+# Rodar a aplicação:
+```
+npm start
+```
+
+# Estrutura da Pasta
+
+```
+dist/
+├── controllers/
+│ ├── UserController.ts
+│ └── ...
+├── lang/
+│ ├── pt-br.js
+│ └── en-un.js
+├── models/
+│ └── modelUser/
+│   ├── User.js
+├── routes/
+│ ├── userRoutes.js
+│ └── ...
+├── DataBase/
+│ ├── ConfigDB.js
+│ └── ...
+└── server.js
+└── app.js
+└── token.js
+```
+
