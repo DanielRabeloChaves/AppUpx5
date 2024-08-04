@@ -26,7 +26,9 @@ Pré-requisitos
 *  Android Studio (para emuladores Android): [Download]([doc:linking-to-pages#anchor-links](https://developer.android.com/studio?gad_source=1&gclid=Cj0KCQjwzby1BhCQARIsAJ_0t5ORs6dFP3EE54iQJt0FGSZ5BO-BEnl_LCO1vfK1ImdB5LzAs0LH3jsaAn_3EALw_wcB&gclsrc=aw.ds))
 ou
 *  Aplicativo Android ExpoGO, disponivel na Google Play: [Download](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=pt_BR&pli=1)
-
+*  SDK 50
+*  Node v20
+  
 # Como Rodar a Aplicação no Emulador e ExpoGo
 
 Instalar as dependências:
