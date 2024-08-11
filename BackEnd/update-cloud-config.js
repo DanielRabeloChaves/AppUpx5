@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-const appJsonPath = path.resolve(__dirname, 'upx5-cloud-config.json');
+const appJsonPath = path.resolve(__dirname, 'upx5-423113-1704adeed3a4.json');
 const appJson = require(appJsonPath);
 
 appJson.type = process.env.CLOUD_type
