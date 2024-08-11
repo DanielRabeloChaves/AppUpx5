@@ -7,7 +7,8 @@
     "start": "npm run update-app-json && expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build-apk": "npm run update-app-json && eas build -p android --profile preview"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
