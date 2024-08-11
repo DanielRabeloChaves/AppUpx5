@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudStorage = new Storage({
-  keyFilename: path.join(__dirname, "../upx5-423113-1704adeed3a4.json"),
+  keyFilename: path.join(__dirname, "../upx5-cloud-config.json"),
   projectId: process.env.CLOUD_project_id
 })
 

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -L server.js"
+    "start": "node update-cloud-config.js && nodemon -L server.js"
   },
   "author": "Daniel Rabelo",
   "license": "ISC",
