@@ -8,9 +8,7 @@ const multer = require('multer');
 const fs = require('fs');
 const { secretKey } = require('../token');
 const jwt = require('jsonwebtoken');
-
 const { verifyToken } = require('../token');
-const { verify } = require('crypto');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -19,13 +17,12 @@ const storage = multer.diskStorage({
             const decryptToken = jwt.verify(token, secretKey);
             let type_access = decryptToken.type_access_user_id;
             if (type_access !== 2) {
-                const fileExtend = file.originalname.substr(file.originalname.lastIndexOf('.'))
                 if ((/image/gi).test(file.mimetype)) {
-                    const pathProject = `uploads/equipment`;
+                    const pathProject = `uploads/equipments`;
                     const pathArq = `${pathProject}/`;
-                    if (!fs.existsSync(pathProject)) {
+                    if (!fs.existsSync(pathProject)) 
                         fs.mkdirSync(pathProject, { recursive: true });
-                    }
+                    
                     cb(null, pathArq);
                 } else {
                     throw new Error('Formato do arquivo inválido')

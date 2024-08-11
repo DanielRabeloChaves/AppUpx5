@@ -42,6 +42,10 @@ EMAIL_pass = password
 EMAIL_host = "smtp.host.com"
 EMAIL_port = port
 EMAIL_secure = true 
+
+CLOUD_project_id= upx5-423113
+
+AMBIENT_DEV=dev
 ```
 
 # Rodar a aplicação:

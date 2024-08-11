@@ -1,10 +1,6 @@
-const jwt = require('jsonwebtoken');
-const { secretKey } = require('../token');
-
 const { 
     modelAllSectors
  } = require('../models/sector/sector');
-
 
 async function getAllSectorController(req, res, next){
     try{

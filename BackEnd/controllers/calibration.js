@@ -1,10 +1,6 @@
-const jwt = require('jsonwebtoken');
-const { secretKey } = require('../token');
-
 const { 
     modelAllStatusCalibration
  } = require('../models/calibration/calibration');
-
 
 async function getAllStatusCalibrationController(req, res, next){
     try{
