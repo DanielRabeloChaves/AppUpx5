@@ -11,8 +11,8 @@ bodyTokenLogin:(name, email, codigo) => `<!DOCTYPE html>
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
         <tr>
             <td bgcolor="#3F7EAF" style="padding: 20px 0; text-align: center;">
-                <h1 style="color: white;">UPX5</h1>
-                <p style="color: white; font-size: 18px;">Trabalho em grupo UPX5</p>
+                <h1 style="color: white;">Lorem Ipsum</h1>
+                <p style="color: white; font-size: 18px;">Projeto UPX5</p>
             </td>
         </tr>
         <tr>
@@ -27,7 +27,7 @@ bodyTokenLogin:(name, email, codigo) => `<!DOCTYPE html>
         </tr>
         <tr>
             <td bgcolor="#3F7EAF" style="padding: 20px; text-align: center;">
-                <p style="color: white;">Abraços, Equipe UPX5.</p>
+                <p style="color: white;">Abraços, Equipe Lorem Ipsum.</p>
             </td>
         </tr>
     </table>

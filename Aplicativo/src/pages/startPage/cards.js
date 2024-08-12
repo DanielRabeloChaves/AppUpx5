@@ -14,7 +14,7 @@ export default ({data}) => {
             <Image style={styles.image} source={item.image} />
             <View><Text style={styles.text} >{item.text}</Text></View>
             <View style={styles.containerButton}>
-                <Button title={"Saiba mais"} titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} onPress={() => handlePress("https://www.bostonscientific.com/en-US/about-us.html")}  />
+                <Button title={"Saiba mais"} titleStyle={defaultStyles.fontButton} buttonStyle={defaultStyles.button} onPress={() => handlePress("https://github.com/DanielRabeloChaves/AppUpx5")}  />
             </View>
         </View>
         ) 
