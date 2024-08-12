@@ -43,17 +43,7 @@ EMAIL_host = "smtp.host.com"
 EMAIL_port = port
 EMAIL_secure = true 
 
-CLOUD_type=CLOUD_type
-CLOUD_project_id=CLOUD_project_id
-CLOUD_private_key_id=CLOUD_private_key_id
-CLOUD_private_key=CLOUD_private_key
-CLOUD_client_email=CLOUD_client_email
-CLOUD_client_id=CLOUD_client_id
-CLOUD_auth_uri=CLOUD_auth_uri
-CLOUD_token_uri=CLOUD_token_uri
-CLOUD_auth_provider_x509_cert_url=CLOUD_auth_provider_x509_cert_url
-CLOUD_client_x509_cert_url=CLOUD_client_x509_cert_url
-CLOUD_universe_domain=CLOUD_universe_domain
+CLOUD_CREDENTIALS="CLOUD_CREDENTIALS_BASE64"
 
 AMBIENT_DEV=dev
 ```

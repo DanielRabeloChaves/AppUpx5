@@ -10,23 +10,11 @@ const Storage = require('@google-cloud/storage');
 const fs = require('fs');
 const path = require('path');
 
-const credentials = {
-  type: process.env.CLOUD_type,
-  project_id: process.env.CLOUD_project_id,
-  private_key_id: process.env.CLOUD_private_key_id.replace(/\\n/g, "\n"),
-  private_key: process.env.CLOUD_private_key,
-  client_email: process.env.CLOUD_client_email,
-  client_id: process.env.CLOUD_client_id,
-  auth_uri: process.env.CLOUD_auth_uri,
-  token_uri: process.env.CLOUD_token_uri,
-  auth_provider_x509_cert_url: process.env.CLOUD_auth_provider_x509_cert_url,
-  client_x509_cert_url: process.env.CLOUD_client_x509_cert_url,
-  universe_domain: process.env.CLOUD_universe_domain
-}
+const decodedCredentials = Buffer.from(process.env.CLOUD_CREDENTIALS, 'base64').toString('utf-8');
+const credentials = JSON.parse(decodedCredentials);
 
 const cloudStorage = new Storage({
-  credentials: credentials,
-  projectId: process.env.CLOUD_project_id
+  credentials: credentials
 })
 
 const AMBIENT_DEV = process.env.AMBIENT_DEV
