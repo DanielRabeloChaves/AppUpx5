@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     logo: {
-        height: 60,
-        width: 122,
+        height: 120,
+        width: 120,
     },
     input: {
         backgroundColor: '#FFFFFF',

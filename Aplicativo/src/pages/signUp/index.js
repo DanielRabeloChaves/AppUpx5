@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
         padding: 10
     },
     logo: {
-        height: 60,
-        width: 122,
+        height: 100,
+        width: 100,
     },
     input: {
         backgroundColor: '#FFFFFF',

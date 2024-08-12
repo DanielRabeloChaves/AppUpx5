@@ -10,23 +10,23 @@ export default () => {
         <View>
             <View style={defaultStyles.styleLineView}>
                 <View style={styles.SocialIcons}>
-                <TouchableOpacity onPress={() => handlePress("https://www.facebook.com/BostonScientific")}>
+                <TouchableOpacity onPress={() => handlePress("https://www.facebook.com/Daniel.Rabelo.chaves")}>
                     <Entypo name="facebook-with-circle" size={30} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handlePress("https://www.instagram.com/bostonsci/")}>
+                <TouchableOpacity onPress={() => handlePress("https://www.instagram.com/daniell.rabelo/")}>
                     <AntDesign name="instagram" size={30} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handlePress("https://twitter.com/bostonsci")}>
-                    <FontAwesome6 name="square-x-twitter" size={30} color="white" />
+                <TouchableOpacity onPress={() => handlePress("https://github.com/DanielRabeloChaves")}>
+                    <AntDesign name="github" size={30} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handlePress("https://www.linkedin.com/company/boston-scientific")}>
+                <TouchableOpacity onPress={() => handlePress("https://www.linkedin.com/in/danielrabelochaves/")}>
                     <Entypo name="linkedin-with-circle" size={30} color="white" />
                 </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.footer}>
                 <Image style={styles.logo} source={Logo}/>
-                <Text style={styles.text} >©2024 Boston Scientific Corporation or its affiliates (UPX5).</Text>
+                <Text style={styles.text} >©2024 Lorem Ipsum Corporation or its affiliates (Daniel RC).</Text>
             </View>
         </View>
     )
@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
         color: "white"
     },
     logo: {
-        height: 30,
-        width: 60,
+        height: 50,
+        width: 50,
     },
     SocialIcons:{
     width: "80%",

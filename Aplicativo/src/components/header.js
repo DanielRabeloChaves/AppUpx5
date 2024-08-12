@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 10},
   logo: {
-    height: 30,
-    width: 74,
+    height: 50,
+    width: 50,
   },
   leftContainer: {
     flex: 1,

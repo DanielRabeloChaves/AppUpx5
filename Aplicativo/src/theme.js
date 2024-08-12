@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 const defaultColor = {
-  buttonColor: "#007DB3",
+  buttonColor: "#306A9F",
   fontButtonColor: "#FFFFFF",
-  primaryColor: "#014681",
+  primaryColor: "#1D2633",
   white: "#FFFFFF",
   grey: "#5E5E5E",
-  profile: "#40576B",
+  profile: "#DEB038",
 }
 
 const font = {
